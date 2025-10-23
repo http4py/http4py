@@ -1,0 +1,5 @@
+[project]
+name = "http4py-core"
+dynamic = ["version"]
+description = "Core http4py functionality"
+dependencies = []

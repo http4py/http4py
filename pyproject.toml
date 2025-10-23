@@ -1,0 +1,82 @@
+[tool.uv.workspace]
+members = [
+    "core",
+]
+
+[project]
+name = "http4py"
+version = "0.1.0"
+requires-python = ">=3.13"
+
+[dependency-groups]
+dev = [
+    "pytest>=7.0.0",
+    "mypy>=1.0.0", 
+    "ruff>=0.1.0",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["*/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+pythonpath = ["core/src"]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+disallow_untyped_decorators = true
+
+[tool.ruff]
+target-version = "py313"
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "N", "UP", "S", "B", "A", "C4", "T20"]
+ignore = [
+    "S101",  # Allow assert in tests
+    "T201",  # Allow print in examples
+    "F401",  # Allow unused imports in __init__.py files (re-exports)
+    "E402",  # Allow imports not at top in examples
+    "B027",  # Allow empty methods in abstract base classes
+    "N802",  # Allow non-lowercase function names (thenF follows http4k convention)
+    "I001",  # Allow unsorted imports (particularly in __init__.py files)
+]
+
+[tool.ruff.lint.isort]
+force-single-line = false
+combine-as-imports = true
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+
+[tool.http4py.common]
+version = "0.1.0"
+requires-python = ">=3.13"
+license = "Apache 2.0"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "regex"
+path = "pyproject.toml"
+pattern = 'version = "(?P<version>[^"]+)"'
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/http4py"]
+
+[tool.hatch.envs.default]
+python = "3.13"
