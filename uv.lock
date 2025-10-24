@@ -6,6 +6,7 @@ requires-python = ">=3.13"
 members = [
     "http4py",
     "http4py-core",
+    "http4py-server-random",
 ]
 
 [[package]]
@@ -40,7 +41,17 @@ dev = [
 
 [[package]]
 name = "http4py-core"
-source = { virtual = "core" }
+source = { editable = "core" }
+
+[[package]]
+name = "http4py-server-random"
+source = { editable = "server/random" }
+dependencies = [
+    { name = "http4py-core" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "http4py-core", editable = "core" }]
 
 [[package]]
 name = "iniconfig"

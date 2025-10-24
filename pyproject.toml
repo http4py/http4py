@@ -1,6 +1,7 @@
 [tool.uv.workspace]
 members = [
     "core",
+    "server/random"
 ]
 
 [project]
@@ -80,3 +81,7 @@ packages = ["src/http4py"]
 
 [tool.hatch.envs.default]
 python = "3.13"
+
+[tool.uv.sources]
+http4py-core = { workspace = true }
+http4py-server-random = { workspace = true }
