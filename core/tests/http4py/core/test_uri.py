@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import pytest
-
 from http4py.core import Uri
 
 

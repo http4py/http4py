@@ -1,7 +1,7 @@
 from .body import Body
 from .http import HttpHandler, Filter
 from .http_version import HttpVersion
-from .message import Request, Response, HttpMessage
+from .message import Request as Request, Response as Response, HttpMessage as HttpMessage
 from .method import Method, GET, POST, PUT, DELETE, PATCH, HEAD, OPTIONS
 from .status import (
     Status,

@@ -1,1 +1,1 @@
-from .MyServer import MyServer
+from .my_server import MyServer
