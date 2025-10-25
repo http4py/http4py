@@ -1,5 +1,6 @@
 name: Deploy http4py.org
-'on':
+on:
+  workflow_dispatch:
   push:
     paths:
     - website/**
