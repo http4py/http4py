@@ -43,10 +43,7 @@ def main():
     env = os.environ.copy()
     env["MYPYPATH"] = mypy_path
 
-    result = subprocess.run([
-        "uv", "run", "--package", pkg_name,
-        "mypy", "-p", "http4py"
-    ], env=env, check=False)
+    result = subprocess.run(["uv", "run", "--package", pkg_name, "mypy", "-p", "http4py"], env=env, check=False)
 
     if result.returncode != 0:
         print(f"Type check failed for {pkg_name}!")

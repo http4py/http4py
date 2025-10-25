@@ -29,10 +29,9 @@ def main():
         return
 
     print(f"Running tests for {pkg_name}...")
-    result = subprocess.run([
-        "uv", "run", "--package", pkg_name,
-        "python", "-m", "pytest", test_path, "-v"
-    ], check=False)
+    result = subprocess.run(
+        ["uv", "run", "--package", pkg_name, "python", "-m", "pytest", test_path, "-v"], check=False
+    )
 
     if result.returncode != 0:
         print(f"Tests failed for {pkg_name}!")
