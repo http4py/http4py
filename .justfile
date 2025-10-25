@@ -2,18 +2,21 @@ default:
     @just --list
 
 check:
-    uv run --package http4py-core python -m pytest http4py-core/tests/
-    MYPYPATH=http4py-core/src uv run --package http4py-core mypy -p http4py
+    python scripts/check_all.py
 
-    uv run --package http4py-server-asgi python -m pytest http4py-server/asgi/tests/
-    MYPYPATH=http4py-server/asgi/src:http4py-server/uvicorn/src uv run --package http4py-server-asgi mypy -p http4py
+# Individual module commands
+test-module module:
+    python scripts/test_module.py {{module}}
 
-    uv run --package http4py-server-uvicorn python -m pytest http4py-server/uvicorn/tests/
-    MYPYPATH=http4py-server/asgi/src:http4py-server/uvicorn/src uv run --package http4py-server-uvicorn mypy -p http4py
+typecheck-module module:
+    python scripts/typecheck_module.py {{module}}
 
-    uv run mypy examples/
-    uv run ruff check .
-    uv run ruff format --check .
+# Workspace-wide commands  
+test-all:
+    python scripts/test_all.py
+
+typecheck-all:
+    python scripts/typecheck_all.py
 
 # see https://github.com/casey/just
 
