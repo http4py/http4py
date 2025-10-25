@@ -1,0 +1,256 @@
+/* CSS Custom Properties for Typeflows.io */
+:root {
+  --primary: #6366f1;
+  --primary-dark: #4f46e5;
+  --secondary: #ec4899;
+  --accent: #06b6d4;
+}
+
+/* Font Family Overrides */
+body {
+  font-family: 'Inter', sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* A/B Testing Version Control */
+.version-1 .version-2-only {
+  display: none !important;
+}
+
+.version-2 .version-1-only {
+  display: none !important;
+}
+
+/* Default state: show version 1 if no class is applied yet */
+body:not(.version-1):not(.version-2) .version-2-only {
+  display: none;
+}
+
+/* Custom utility classes using CSS variables */
+.text-primary {
+  color: var(--primary);
+}
+
+.text-secondary {
+  color: var(--secondary);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-primary {
+  background-color: var(--primary);
+}
+
+.bg-secondary {
+  background-color: var(--secondary);
+}
+
+/* Custom hover states using CSS variables */
+.hover\:text-primary:hover {
+  color: var(--primary);
+}
+
+.hover\:text-primary-dark:hover {
+  color: var(--primary-dark);
+}
+
+.hover\:text-secondary:hover {
+  color: var(--secondary);
+}
+
+/* Documentation Prose Customisation - Higher Specificity */
+.prose.prose-gray {
+  /* Headings - Using !important to override Tailwind */
+  h1 {
+    font-size: 2.25rem !important; /* 36px */
+    line-height: 2.5rem !important;
+    font-weight: 800 !important;
+    color: #111827 !important;
+    margin-top: 0 !important;
+    margin-bottom: 1.5rem !important;
+  }
+  
+  h2 {
+    font-size: 1.875rem !important; /* 30px */
+    line-height: 2.25rem !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+  }
+  
+  h3 {
+    font-size: 1.5rem !important; /* 24px */
+    line-height: 2rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  
+  h4 {
+    font-size: 1.25rem !important; /* 20px */
+    line-height: 1.75rem !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  h5 {
+    font-size: 1.125rem !important; /* 18px */
+    line-height: 1.75rem !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  h6 {
+    font-size: 1rem !important; /* 16px */
+    line-height: 1.5rem !important;
+    font-weight: 600 !important;
+    color: #374151 !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  /* Links */
+  a {
+    color: var(--secondary) !important;
+    text-decoration: none !important;
+    font-weight: 500 !important;
+    transition: color 0.2s ease, text-decoration 0.2s ease !important;
+  }
+  
+  a:hover:not(.no-underline) {
+    color: #a855f7 !important;
+    text-decoration: underline !important;
+    text-decoration-thickness: 2px !important;
+    text-underline-offset: 2px !important;
+  }
+  
+  
+  /* Paragraphs */
+  p {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    line-height: 1.75 !important;
+  }
+  
+  /* Lists */
+  ul, ol {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    padding-left: 1.5rem !important;
+    list-style: initial !important;
+  }
+  
+  ul {
+    list-style-type: disc !important;
+  }
+  
+  ol {
+    list-style-type: decimal !important;
+  }
+  
+  li {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+    display: list-item !important;
+  }
+  
+  /* Strong text */
+  strong {
+    font-weight: 700 !important;
+    color: #111827 !important;
+  }
+  
+  /* Tables */
+  table {
+    border-collapse: collapse !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 1.5rem !important;
+    width: 100% !important;
+    border: 1px solid #e5e7eb !important;
+    border-radius: 0.375rem !important;
+    overflow: hidden !important;
+  }
+  
+  thead {
+    background-color: #f9fafb !important;
+  }
+  
+  th {
+    padding: 0.75rem 1rem !important;
+    text-align: left !important;
+    font-weight: 600 !important;
+    color: #111827 !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    font-size: 0.875rem !important;
+  }
+  
+  td {
+    padding: 0.75rem 1rem !important;
+    border-bottom: 1px solid #f3f4f6 !important;
+    color: #374151 !important;
+    font-size: 0.875rem !important;
+  }
+  
+  tbody tr:nth-child(even) {
+    background-color: #f9fafb !important;
+  }
+  
+  tbody tr:hover {
+    background-color: #f3f4f6 !important;
+  }
+}
+
+/* GitHub content styling - hide elements with .github or .github-only class */
+.github,
+.github-only {
+  display: none !important;
+}
+
+/* Prevent sidebar navigation flash */
+aside.lg\:block {
+  opacity: 1;
+  transition: none;
+}
+
+/* Prevent sidebar content flash during page transitions */
+aside {
+  will-change: auto;
+}
+
+aside .space-y-6 > div {
+  opacity: 1;
+  transform: none;
+  transition: none;
+}
+
+/* Ensure mobile menu starts properly hidden */
+#mobile-menu.hidden {
+  display: none;
+}
+
+/* Fix anchor links hidden behind fixed navigation in docs */
+.docs-layout h1,
+.docs-layout h2,
+.docs-layout h3,
+.docs-layout h4,
+.docs-layout h5,
+.docs-layout h6 {
+  scroll-margin-top: 6rem;
+}
+
+/* Ensure footer appears above right sidebar in docs */
+.docs-layout footer {
+  position: relative;
+  z-index: 25;
+}

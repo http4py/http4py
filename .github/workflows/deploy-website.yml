@@ -1,0 +1,31 @@
+name: Deploy http4py.org
+'on':
+  push:
+    paths:
+    - website/**
+    branches:
+    - '*'
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v5.0.0
+    - name: Setup Hugo
+      uses: peaceiris/actions-hugo@v3.0.0
+      with:
+        hugo-version: 0.148.1
+        extended: 'true'
+    - name: Build
+      run: hugo --minify -s website
+      shell: bash
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4.0.0
+      with:
+        personal_token: ${{ secrets.PUBLIC_TOKEN }}
+        external_repository: http4py/http4py.github.io
+        publish_branch: main
+        force_orphan: 'true'
+        publish_dir: website/public
+        cname: www.http4py.org

@@ -1,0 +1,32 @@
+baseURL: "https://http4py.org"
+languageCode: "en-GB"
+title: "http4py: Server as a Function for Python"
+
+params:
+  description: "http4py: Server as a Function for Python"
+  author: "http4py"
+ 
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+    extensions:
+      definitionList: true
+      footnote: true
+      linkify: true
+      strikethrough: true
+      table: true
+      taskList: true
+      typographer: true
+  highlight:
+    style: 'github-dark'
+    lineNos: false
+    lineNumbersInTable: false
+    tabWidth: 2
+
+enableEmoji: true
+
+caches:
+  getresource:
+    maxAge: 10m
+    dir: :cacheDir/:project

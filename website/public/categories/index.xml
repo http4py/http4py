@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Categories on http4py: Server as a Function for Python</title>
+    <link>http://10.0.0.14:1313/categories/</link>
+    <description>Recent content in Categories on http4py: Server as a Function for Python</description>
+    <generator>Hugo</generator>
+    <language>en-GB</language>
+    <atom:link href="http://10.0.0.14:1313/categories/index.xml" rel="self" type="application/rss+xml" />
+  </channel>
+</rss>

@@ -1,0 +1,129 @@
+/* Critical CSS for above-the-fold content */
+
+/* Essential Tailwind reset and base styles */
+*,::before,::after {
+  box-sizing: border-box;
+  border-width: 0;
+  border-style: solid;
+  border-color: #e5e7eb;
+}
+
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  -moz-tab-size: 4;
+  tab-size: 4;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
+}
+
+/* Font-face declarations moved to fonts.css to avoid duplication */
+
+body {
+  margin: 0;
+  line-height: inherit;
+}
+
+/* Critical layout utilities */
+.fixed { position: fixed; }
+.relative { position: relative; }
+.z-10 { z-index: 10; }
+.z-50 { z-index: 50; }
+
+/* Flexbox utilities for navigation */
+.flex { display: flex; }
+.hidden { display: none; }
+.items-center { align-items: center; }
+.justify-between { justify-content: space-between; }
+.space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.5rem; }
+.space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.75rem; }
+.space-x-8 > :not([hidden]) ~ :not([hidden]) { margin-left: 2rem; }
+
+/* Width and spacing utilities */
+.w-full { width: 100%; }
+.w-auto { width: auto; }
+.h-8 { height: 2rem; }
+.max-w-7xl { max-width: 80rem; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.px-4 { padding-left: 1rem; padding-right: 1rem; }
+.py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+.pt-32 { padding-top: 8rem; }
+.pb-4 { padding-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+
+/* Typography with stable sizing to prevent CLS */
+.text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+.text-2xl { font-size: 1.5rem; line-height: 2rem; }
+.text-3xl { font-size: 1.875rem; line-height: 2.25rem; }
+.text-4xl { font-size: 2.25rem; line-height: 2.5rem; }
+.text-5xl { font-size: 3rem; line-height: 1; }
+.text-6xl { font-size: 3.75rem; line-height: 1; }
+.text-7xl { font-size: 4.5rem; line-height: 1; }
+.font-bold { font-weight: 700; }
+.font-black { font-weight: 900; }
+.font-extrabold { font-weight: 800; }
+.leading-tight { line-height: 1.25; }
+.leading-relaxed { line-height: 1.625; }
+.text-center { text-align: center; }
+
+/* Prevent layout shifts from font loading */
+.text-4xl, .text-5xl, .text-6xl, .text-7xl {
+  font-kerning: none;
+  font-feature-settings: "kern" 0;
+  text-rendering: optimizeSpeed;
+}
+
+
+/* Colors - Critical for navigation and hero */
+.text-white { color: rgb(255 255 255); }
+.text-gray-300 { color: rgb(209 213 219); }
+.text-gray-400 { color: rgb(156 163 175); }
+.text-gray-900 { color: rgb(17 24 39); }
+.bg-gray-900 { background-color: rgb(17 24 39); }
+.bg-gray-50 { background-color: rgb(249 250 251); }
+
+/* Background utilities */
+.bg-gray-900\/80 { background-color: rgb(17 24 39 / 0.8); }
+.backdrop-blur-md { backdrop-filter: blur(12px); }
+.border-b { border-bottom-width: 1px; }
+.border-gray-800 { border-color: rgb(31 41 55); }
+
+/* Gradient text for hero */
+.bg-gradient-to-r { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+.from-primary { --tw-gradient-from: rgb(99 102 241); --tw-gradient-to: rgb(99 102 241 / 0); --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to); }
+.to-secondary { --tw-gradient-to: rgb(168 85 247); }
+.bg-clip-text { background-clip: text; }
+.text-transparent { color: transparent; }
+
+/* Hover states for navigation */
+.hover\:text-primary:hover { color: rgb(99 102 241); }
+.transition-colors { transition-property: color, background-color, border-color, text-decoration-color, fill, stroke; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 150ms; }
+
+/* Responsive utilities */
+@media (min-width: 640px) {
+  .sm\:px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .sm\:grid { display: grid; }
+  .sm\:flex { display: flex; }
+  .sm\:hidden { display: none; }
+}
+
+@media (min-width: 768px) {
+  .md\:flex { display: flex; }
+  .md\:hidden { display: none; }
+  .md\:text-6xl { font-size: 3.75rem; line-height: 1; }
+}
+
+@media (min-width: 1024px) {
+  .lg\:px-8 { padding-left: 2rem; padding-right: 2rem; }
+  .lg\:grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+  .lg\:col-span-6 { grid-column: span 6 / span 6; }
+}
+
+/* Overflow utilities */
+.overflow-hidden { overflow: hidden; }
+
+/* Custom properties for consistent colors */
+:root {
+  --primary: rgb(99 102 241);
+  --secondary: rgb(168 85 247);
+}
