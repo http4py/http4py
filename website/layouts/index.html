@@ -1,5 +1,112 @@
 {{ define "main" }}
+<main class="container">
+    <section style="text-align: center; padding: 4rem 0; min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+        <div style="margin-bottom: 2rem;">
+            <img src="/images/http4py-logo.webp" alt="http4py Logo" style="width: 120px; height: 120px; margin-bottom: 2rem;">
+        </div>
 
-    Hello!
+        <h1 style="font-family: 'JetBrains Mono', monospace; font-size: 4rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-light); text-shadow: 0 2px 4px rgba(0,0,0,0.3);">
+            http4py
+        </h1>
 
+        <p style="font-size: 1.5rem; color: var(--python-yellow); margin-bottom: 1rem; font-weight: 500;">
+            Server as a Function for Python
+        </p>
+
+        <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.8;">
+            A functional HTTP toolkit for Python, inspired by <a href="https://monkey.org/~marius/funsrv.pdf" target="_blank" style="color: var(--python-yellow); font-weight: 600;"><strong>Server as a Function</strong></a> — the paradigm that treats server-side logic as pure, composable functions. From the same development team that brought you <a href="https://http4k.org" target="_blank" style="color: var(--python-yellow); font-weight: 600;">http4k</a> — the most testable web framework on the planet!
+        </p>
+        
+        <p style="font-size: 1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 3rem auto; line-height: 1.7;">
+            Build composable, immutable HTTP services with a clean, functional API. http4py treats your entire application as a simple function that takes a Request and returns a Response — making it incredibly easy to test, reason about, and compose.
+        </p>
+
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
+            <a href="https://github.com/http4py/http4py" class="btn" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+            <a href="#features" class="btn btn-outline">
+                Learn More
+            </a>
+        </div>
+
+        <div style="display: flex; justify-content: center; align-items: center; gap: 2rem; flex-wrap: wrap; margin-top: 2rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Immutable HTTP Objects
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Functional Composition
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--text-muted);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                Type Safe
+            </div>
+        </div>
+    </section>
+
+    <section id="features" style="padding: 4rem 0; border-top: 1px solid var(--python-blue);">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--python-yellow);">
+                Why http4py?
+            </h2>
+            <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto;">
+                Simple. Testable. Functional. When your server is just a function, everything becomes easier to understand, test, and compose. No magic, no complexity — just pure functions all the way down.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
+            <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🧪 Extreme Testability</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    Your entire app is just a function. No need to spin up servers or mock complex frameworks — just pass in a Request and assert on the Response. Testing has never been this simple.
+                </p>
+            </div>
+
+            <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🔗 Server as a Function</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    Inspired by Twitter's groundbreaking paper, http4py treats your entire application as a simple function: Request → Response. Compose, transform, and reason about your code like never before.
+                </p>
+            </div>
+
+            <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🛡️ Battle-Tested Approach</h3>
+                <p style="color: var(--text-muted); line-height: 1.6;">
+                    From the team behind http4k, which has been proven in production by countless teams. Full type safety with mypy strict mode and immutable data structures throughout.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section style="padding: 4rem 0; text-align: center; border-top: 1px solid var(--python-blue);">
+        <h2 style="font-size: 2rem; margin-bottom: 2rem; color: var(--python-yellow);">
+            Get Started
+        </h2>
+
+        <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 1.5rem; margin: 2rem auto; max-width: 600px; text-align: left; border: 1px solid var(--python-blue);">
+            <code style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
+                # Coming soon
+            </code>
+            <br>
+            <code style="color: var(--python-light-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
+                pip install http4py-core
+            </code>
+        </div>
+
+        <div style="margin-top: 2rem;">
+            <a href="https://github.com/http4py/http4py" class="btn" target="_blank" rel="noopener noreferrer">
+                View on GitHub
+            </a>
+        </div>
+    </section>
+
+</main>
 {{ end }}
