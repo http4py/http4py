@@ -2,16 +2,17 @@ default:
     @just --list
 
 check:
-    uv run --package http4py-core python -m pytest http4py-core
-    MYPYPATH=http4py-core uv run --package http4py-core mypy -p http4py
+    uv run --package http4py-core python -m pytest http4py-core/tests/
+    MYPYPATH=http4py-core/src uv run --package http4py-core mypy -p http4py
 
-    uv run --package http4py-server-asgi python -m pytest http4py-server/asgi
-    MYPYPATH=http4py-server/uvicorn uv run --package http4py-server-uvicorn mypy -p http4py
+    uv run --package http4py-server-asgi python -m pytest http4py-server/asgi/tests/
+    MYPYPATH=http4py-server/asgi/src:http4py-server/uvicorn/src uv run --package http4py-server-asgi mypy -p http4py
 
-    uv run --package http4py-server-uvicorn python -m pytest http4py-server/uvicorn
-    MYPYPATH=http4py-server/uvicorn uv run --package http4py-server-uvicorn mypy -p http4py
+    uv run --package http4py-server-uvicorn python -m pytest http4py-server/uvicorn/tests/
+    MYPYPATH=http4py-server/asgi/src:http4py-server/uvicorn/src uv run --package http4py-server-uvicorn mypy -p http4py
 
-    uv run mypy examples
+    uv run mypy examples/
+    uv run ruff check .
     uv run ruff format --check .
 
 # see https://github.com/casey/just

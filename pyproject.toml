@@ -52,6 +52,10 @@ ignore = [
     "B027",  # Allow empty methods in abstract base classes
     "N802",  # Allow non-lowercase function names (thenF follows http4k convention)
     "I001",  # Allow unsorted imports (particularly in __init__.py files)
+    "S602",  # Allow subprocess with shell=True in scripts (trusted input)
+    "S603",  # Allow subprocess calls in scripts (trusted input)
+    "S607",  # Allow partial executable paths in scripts (uv is in PATH)
+    "S310",  # Allow URL open in HTTP client (that's the point of the client)
 ]
 
 [tool.ruff.lint.isort]

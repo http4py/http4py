@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from typing import Any, Awaitable, Callable, Dict, List
+from collections.abc import Awaitable, Callable
+from typing import Any
 
 from http4py.core import HttpHandler, Request
 from http4py.core.method import Method
 from http4py.core.uri import Uri
 
 AsgiApp = Callable[
-    [Dict[str, Any], Callable[[], Awaitable[Dict[str, Any]]], Callable[[Dict[str, Any]], Awaitable[None]]],
+    [dict[str, Any], Callable[[], Awaitable[dict[str, Any]]], Callable[[dict[str, Any]], Awaitable[None]]],
     Awaitable[None],
 ]
 
@@ -22,9 +23,9 @@ class AsgiAdapter(ABC):
 class StandardAsgiAdapter(AsgiAdapter):
     def to_asgi(self, handler: HttpHandler) -> AsgiApp:
         async def asgi_app(
-            scope: Dict[str, Any],
-            receive: Callable[[], Awaitable[Dict[str, Any]]],
-            send: Callable[[Dict[str, Any]], Awaitable[None]],
+            scope: dict[str, Any],
+            receive: Callable[[], Awaitable[dict[str, Any]]],
+            send: Callable[[dict[str, Any]], Awaitable[None]],
         ) -> None:
             if scope["type"] != "http":
                 return
@@ -40,7 +41,7 @@ class StandardAsgiAdapter(AsgiAdapter):
 
             request = Request(method, uri)
 
-            headers: Dict[str, str] = {}
+            headers: dict[str, str] = {}
             for name_bytes, value_bytes in scope.get("headers", []):
                 name = name_bytes.decode("latin1")
                 value = value_bytes.decode("latin1")
@@ -48,7 +49,7 @@ class StandardAsgiAdapter(AsgiAdapter):
 
             request = request.headers_(headers)
 
-            body_parts: List[bytes] = []
+            body_parts: list[bytes] = []
             while True:
                 message = await receive()
                 if message["type"] == "http.request":

@@ -19,7 +19,9 @@ from http4py.server import Http4pyServer, StdLib
 def main() -> None:
     # Simple single-endpoint server
     def hello_world() -> Http4pyServer:
-        handler = lambda req: Response(OK).body_("Hello, World!")
+        def handler(req: Request) -> Response:
+            return Response(OK).body_("Hello, World!")
+
         return StdLib(port=8080).to_server(handler)
 
     # Server with basic routing
