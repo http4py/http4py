@@ -6,7 +6,6 @@ on:
     paths-ignore:
     - website/**
   pull_request:
-    branches: [ * ]
     paths-ignore:
     - website/**
 
