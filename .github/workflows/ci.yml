@@ -41,10 +41,10 @@ jobs:
       run: uv sync --dev
 
     - name: Test ${{ matrix.package.name }}
-      run: uv run --package ${{ matrix.package.name } python -m pytest ${{ matrix.package.path }}
+      run: uv run --package ${{ matrix.package.name }} python -m pytest ${{ matrix.package.path }}
 
     - name: Type check ${{ matrix.package.name }}
-      run: MYPYPATH=${{ matrix.package.name } uv run --package ${{ matrix.package.name } mypy -p http4py
+      run: MYPYPATH=${{ matrix.package.name }} uv run --package ${{ matrix.package.name }} mypy -p http4py
 
     - name: Run linting
       run: uv run ruff check .
