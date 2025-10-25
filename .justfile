@@ -2,11 +2,16 @@ default:
     @just --list
 
 check:
-    uv run --package http4py-core python -m pytest core/tests/
-    uv run --package http4py-core mypy core/src/
-    uv run --package http4py-server-random python -m pytest server/random/tests/
-    uv run --package http4py-server-random mypy server/random/src/
-    uv run ruff check .
+    uv run --package http4py-core python -m pytest http4py-core
+    MYPYPATH=http4py-core uv run --package http4py-core mypy -p http4py
+
+    uv run --package http4py-server-asgi python -m pytest http4py-server/asgi
+    MYPYPATH=http4py-server/uvicorn uv run --package http4py-server-uvicorn mypy -p http4py
+
+    uv run --package http4py-server-uvicorn python -m pytest http4py-server/uvicorn
+    MYPYPATH=http4py-server/uvicorn uv run --package http4py-server-uvicorn mypy -p http4py
+
+    uv run mypy examples
     uv run ruff format --check .
 
 # see https://github.com/casey/just
@@ -61,8 +66,3 @@ _recipes:
 # update verions
 versions:
     ./gradlew versionCatalogUpdate
-
-# run the entire build
-rerun +args="":
-    rm -rf website/public
-    ./gradlew clean check --rerun-tasks

@@ -9,12 +9,16 @@ http4py is a functional HTTP toolkit for Python, inspired by the http4k library.
 ### Package Structure
 - **`http4py.core`** - Core HTTP primitives (Request, Response, Uri, Status, Method, etc.)
 - **`http4py.routing`** - Routing functionality (Route, route, RoutingHttpHandler, routes)
+- **`http4py.server`** - Server abstractions and implementations (Http4pyServer, StdLib)
+- **`http4py.client`** - HTTP client implementations (stdlib_client)
 
 ### Key Design Principles
 - **Immutability** - All HTTP objects are immutable using frozen dataclasses
 - **Functional composition** - Builder pattern with fluent API
+- **Server as a Function** - HttpHandler = Callable[[Request], Response] - same interface for servers and clients
 - **Type safety** - Full type annotations with mypy strict mode
-- **Separation of concerns** - Core HTTP vs routing concerns are separate
+- **Separation of concerns** - Core HTTP vs routing vs server vs client concerns are separate
+- **Enum-based constants** - Use enums with convenience constants for HTTP methods and status codes
 
 ## Style Guide
 
@@ -33,6 +37,7 @@ http4py is a functional HTTP toolkit for Python, inspired by the http4k library.
 - **Strict mypy** - Code must pass mypy in strict mode
 - **Return types** - All methods must specify return types
 - **Object parameter** - Use `other: object` for `__eq__` methods
+- **Explicit re-exports** - Use `import Name as Name` syntax for mypy strict mode compatibility
 
 ### Import Style
 ```python
@@ -100,12 +105,21 @@ uv run ruff format .
 - **Request** - HTTP request with method, uri, headers, body
 - **Response** - HTTP response with status, headers, body
 - **Body** - Abstract body handling (memory/stream)
-- **Uri** - Immutable URI with builder methods
 
 ### HTTP Primitives
-- **Method** - HTTP methods (GET, POST, etc.)
-- **Status** - HTTP status codes (OK, NOT_FOUND, etc.)
+- **Method** - HTTP methods enum with constants (Method.GET, GET, etc.)
+- **Status** - HTTP status codes enum with constants (Status.OK, OK, etc.)
 - **HttpVersion** - HTTP version enumeration
+- **HttpHandler** - Core functional interface: Callable[[Request], Response]
+- **Uri** - Immutable URI with `Uri.of()` parsing and builder methods
+
+### Server Components
+- **Http4pyServer** - Abstract server interface with start/stop/block methods
+- **ServerConfig** - Abstract configuration interface
+- **StdLib** - Standard library HTTP server implementation
+
+### Client Components
+- **stdlib_client** - HTTP client as HttpHandler using urllib.request
 
 ### Routing
 - **Route** - Path-based routing with fluent API
@@ -115,15 +129,42 @@ uv run ruff format .
 
 ### Basic Request/Response
 ```python
-from http4py.core import Request, Response, GET, OK
+from http4py.core import Request, Response
+from http4py.core.method import GET
+from http4py.core.status import OK
 
 request = Request(GET, "/api/users").header_("Authorization", "Bearer token")
 response = Response(OK).body_("Hello World").header_("Content-Type", "text/plain")
 ```
 
+### Server
+```python
+from http4py.core import Response
+from http4py.core.status import OK
+from http4py.server import StdLib
+
+def hello_handler(request):
+    return Response(OK).body_("Hello, http4py!")
+
+StdLib(8080).to_server(hello_handler).start().block()
+```
+
+### Client
+```python
+from http4py.core import Request
+from http4py.core.method import GET
+from http4py.client import stdlib_client
+
+request = Request(GET, "https://api.example.com/users")
+response = stdlib_client(request)
+print(f"Status: {response.status}")
+```
+
 ### Routing
 ```python
-from http4py.core import GET, Response, OK
+from http4py.core import Response
+from http4py.core.method import GET
+from http4py.core.status import OK
 from http4py.routing import route, routes
 
 def hello_handler(request):
@@ -138,9 +179,11 @@ app = routes(
 ```python
 from http4py.core import Uri
 
-uri = (Uri()
-    .scheme_("https")
-    .host_("api.example.com")
+# Simple string URIs (preferred for most cases)
+request = Request(GET, "https://api.example.com/users?active=true&limit=10")
+
+# Builder pattern for dynamic construction
+uri = (Uri.of("https://api.example.com")
     .path_("/users")
     .query_("active", "true")
     .query_("limit", "10"))
@@ -187,9 +230,15 @@ uv run ruff format .       # Auto-formatting
 3. **All dataclasses must be frozen**
 4. **All methods must have complete type annotations**
 5. **Use builder pattern with trailing `_` for mutator methods**
-6. **Separate core HTTP concerns from routing concerns**
+6. **Separate core HTTP concerns from routing/server/client concerns**
 7. **Code must pass mypy strict mode**
 8. **Use double quotes for strings**
 9. **120 character line limit**
-10. **Do not use `__all__` for explicit exports - mypy can infer from imports**
-11. **Do not explicitly reference modules in root pyproject.toml except in workspace member list**
+10. **Use explicit re-exports (`import Name as Name`) for mypy strict compatibility**
+11. **Constants co-located with enums** - HTTP status/method constants live in their respective enum modules
+12. **Server as a Function design** - HttpHandler interface unifies servers and clients
+13. **Import from specific modules** - Use `from http4py.core.status import OK` not convenience wrappers
+14. **Enum-based lookups** - Use `Status.from_code()` for dynamic status creation
+15. **Prefer string URIs** - Use `Request(GET, "https://example.com")` over builder pattern for simple cases
+16. **Uri.of() for parsing** - Use `Uri.of()` method instead of deprecated `Uri.parse()`
+17. **Do not explicitly reference modules in root pyproject.toml except in workspace member list**

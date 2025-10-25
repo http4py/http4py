@@ -1,0 +1,9 @@
+[project]
+name = "http4py-server-uvicorn"
+dynamic = ["version"]
+description = "http4py Uvicorn Server"
+dependencies = [
+    "http4py-core",
+    "http4py-server-asgi",
+    "uvicorn",
+]

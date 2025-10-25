@@ -1,7 +1,0 @@
-[project]
-name = "http4py-server-random"
-dynamic = ["version"]
-description = "http4py Server implementation"
-dependencies = [
-    "http4py-core",
-]

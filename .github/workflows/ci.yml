@@ -19,8 +19,12 @@ jobs:
         package:
           - name: "http4py-core"
             path: "core"
-          - name: "http4py-server-random"
-            path: "server/random"
+
+          - name: "http4py-server-asgi"
+            path: "server/asgi"
+
+          - name: "http4py-server-uvicorn"
+            path: "server/uvicorn"
 
     steps:
     - uses: actions/checkout@v4
@@ -37,10 +41,10 @@ jobs:
       run: uv sync --dev
 
     - name: Test ${{ matrix.package.name }}
-      run: uv run --package ${{ matrix.package.name }} python -m pytest ${{ matrix.package.path }}/tests/ -v --tb=short
+      run: uv run --package ${{ matrix.package.name } python -m pytest ${{ matrix.package.path }
 
     - name: Type check ${{ matrix.package.name }}
-      run: uv run --package ${{ matrix.package.name }} mypy ${{ matrix.package.path }}/src/
+      run: MYPYPATH=${{ matrix.package.name } uv run --package ${{ matrix.package.name } mypy -p http4py
 
     - name: Run linting
       run: uv run ruff check .

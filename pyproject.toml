@@ -1,7 +1,8 @@
 [tool.uv.workspace]
 members = [
-    "core",
-    "server/random"
+    "http4py-core",
+    "http4py-server/asgi",
+    "http4py-server/uvicorn"
 ]
 
 [project]
@@ -12,7 +13,7 @@ requires-python = ">=3.13"
 [dependency-groups]
 dev = [
     "pytest>=7.0.0",
-    "mypy>=1.0.0", 
+    "mypy>=1.0.0",
     "ruff>=0.1.0",
 ]
 
@@ -83,4 +84,5 @@ python = "3.13"
 
 [tool.uv.sources]
 http4py-core = { workspace = true }
-http4py-server-random = { workspace = true }
+http4py-server-asgi = { workspace = true }
+http4py-server-uvicorn = { workspace = true }

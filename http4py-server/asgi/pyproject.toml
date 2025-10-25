@@ -1,0 +1,7 @@
+[project]
+name = "http4py-server-asgi"
+dynamic = ["version"]
+description = "http4py ASGI Server Adapter"
+dependencies = [
+    "http4py-core",
+]
