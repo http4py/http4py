@@ -79,32 +79,32 @@ class Example:
 
 ### Test Contracts
 - **Contract naming** - Use `contract_*` prefix for test contract files (e.g., `contract_http_client.py`)
-- **Shared contracts** - Place shared test contracts in the core package tests for cross-package access
+- **Shared testing package** - Use `http4py-shared` package for shared testing utilities and contracts
 - **Abstract base classes** - Use ABC to define behavioral contracts that implementations must satisfy
-- **Import pattern** - Import shared contracts: `from http4py.client.contract_http_client import ContractName`
+- **Import pattern** - Import shared contracts: `from http4py.testing import HttpClientContract`
 - **Implementation testing** - Each implementation extends the contract to ensure consistent behavior
 - **Integration testing** - Use real servers/clients instead of mocks for contract tests when possible
+- **Dev dependencies** - Packages add `http4py-shared` as dev dependency for testing
 
 ### Contract Example
 ```python
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-from http4py.core import HttpHandler, Request, Response
-
-class HttpClientContract(ABC):
-    @abstractmethod
-    def create_client(self) -> HttpHandler:
-        pass
-
-    def test_simple_get_request(self) -> None:
-        client = self.create_client()
-        # Test implementation...
+from http4py.client import PythonClient
+from http4py.core import HttpHandler
+from http4py.testing import HttpClientContract
 
 class TestPythonClient(HttpClientContract):
     def create_client(self) -> HttpHandler:
         return PythonClient()
 ```
+
+### Shared Testing Package
+The `http4py-shared` package contains reusable testing utilities:
+- **Package name**: `http4py-shared`
+- **Import path**: `from http4py.testing import ContractName`
+- **Dependencies**: Depends on `http4py-core` for HTTP primitives
+- **Dev dependency**: Other packages depend on this for testing
 
 ## Development Setup
 

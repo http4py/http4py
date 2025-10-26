@@ -3,7 +3,8 @@ members = [
     "http4py-core",
     "http4py-server/asgi",
     "http4py-server/uvicorn",
-    "http4py-client/requests"
+    "http4py-client/requests",
+    "http4py-testing/support"
 ]
 
 
@@ -74,3 +75,4 @@ http4py-core = { workspace = true }
 http4py-server-asgi = { workspace = true }
 http4py-server-uvicorn = { workspace = true }
 http4py-client-requests = { workspace = true }
+http4py-testing-support = { workspace = true }

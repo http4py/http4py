@@ -7,6 +7,11 @@ license = "Apache-2.0"
 homepage = "https://http4py.org"
 repository = "https://github.com/http4py/http4py"
 
+[project.optional-dependencies]
+dev = [
+    "http4py-testing-support",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

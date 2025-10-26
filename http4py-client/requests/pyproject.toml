@@ -12,6 +12,11 @@ dependencies = [
     "requests",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "http4py-testing-support",
+]
+
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"

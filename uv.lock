@@ -8,6 +8,7 @@ members = [
     "http4py-core",
     "http4py-server-asgi",
     "http4py-server-uvicorn",
+    "http4py-testing-support",
 ]
 
 [manifest.dependency-groups]
@@ -107,16 +108,32 @@ dependencies = [
     { name = "requests" },
 ]
 
+[package.optional-dependencies]
+dev = [
+    { name = "http4py-testing-support" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "http4py-core", editable = "http4py-core" },
+    { name = "http4py-testing-support", marker = "extra == 'dev'", editable = "http4py-testing/support" },
     { name = "requests" },
 ]
+provides-extras = ["dev"]
 
 [[package]]
 name = "http4py-core"
 version = "0.0.1"
 source = { editable = "http4py-core" }
+
+[package.optional-dependencies]
+dev = [
+    { name = "http4py-testing-support" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "http4py-testing-support", marker = "extra == 'dev'", editable = "http4py-testing/support" }]
+provides-extras = ["dev"]
 
 [[package]]
 name = "http4py-server-asgi"
@@ -145,6 +162,17 @@ requires-dist = [
     { name = "http4py-server-asgi", editable = "http4py-server/asgi" },
     { name = "uvicorn" },
 ]
+
+[[package]]
+name = "http4py-testing-support"
+version = "0.0.1"
+source = { editable = "http4py-testing/support" }
+dependencies = [
+    { name = "http4py-core" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "http4py-core", editable = "http4py-core" }]
 
 [[package]]
 name = "idna"
