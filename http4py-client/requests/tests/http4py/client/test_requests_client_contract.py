@@ -7,9 +7,4 @@ from http4py.testing import HttpClientContract
 
 class TestRequestsClientContract(HttpClientContract):
     def create_client(self) -> HttpHandler:
-        return RequestsClient()
-
-
-class TestRequestsClientWithTimeout(HttpClientContract):
-    def create_client(self) -> HttpHandler:
         return RequestsClient(timeout=10.0)

@@ -8,8 +8,10 @@
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
-      <sourceFolder url="file://$MODULE_DIR$/core/src" isTestSource="false" />
-      <sourceFolder url="file://$MODULE_DIR$/server/uvicorn/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http4py-core/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http4py-client/requests/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http4py-server/uvicorn/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http4py-testing/support/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
