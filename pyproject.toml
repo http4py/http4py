@@ -2,7 +2,8 @@
 members = [
     "http4py-core",
     "http4py-server/asgi",
-    "http4py-server/uvicorn"
+    "http4py-server/uvicorn",
+    "http4py-client/requests"
 ]
 
 
@@ -11,6 +12,7 @@ dev = [
     "pytest>=7.0.0",
     "mypy>=1.0.0",
     "ruff>=0.1.0",
+    "types-requests>=2.0.0",
 ]
 
 [tool.pytest.ini_options]
@@ -71,3 +73,4 @@ indent-style = "space"
 http4py-core = { workspace = true }
 http4py-server-asgi = { workspace = true }
 http4py-server-uvicorn = { workspace = true }
+http4py-client-requests = { workspace = true }

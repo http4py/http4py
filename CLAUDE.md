@@ -19,6 +19,7 @@ http4py is a functional HTTP toolkit for Python, inspired by the http4k library.
 - **Type safety** - Full type annotations with mypy strict mode
 - **Separation of concerns** - Core HTTP vs routing vs server vs client concerns are separate
 - **Enum-based constants** - Use enums with convenience constants for HTTP methods and status codes
+- **Test contracts** - Use abstract base classes to ensure consistent behavior across implementations
 
 ## Style Guide
 
@@ -72,6 +73,37 @@ class Example:
         if not isinstance(other, Example):
             return False
         return self.value == other.value
+```
+
+## Testing Guidelines
+
+### Test Contracts
+- **Contract naming** - Use `contract_*` prefix for test contract files (e.g., `contract_http_client.py`)
+- **Shared contracts** - Place shared test contracts in the core package tests for cross-package access
+- **Abstract base classes** - Use ABC to define behavioral contracts that implementations must satisfy
+- **Import pattern** - Import shared contracts: `from http4py.client.contract_http_client import ContractName`
+- **Implementation testing** - Each implementation extends the contract to ensure consistent behavior
+- **Integration testing** - Use real servers/clients instead of mocks for contract tests when possible
+
+### Contract Example
+```python
+from __future__ import annotations
+
+from abc import ABC, abstractmethod
+from http4py.core import HttpHandler, Request, Response
+
+class HttpClientContract(ABC):
+    @abstractmethod
+    def create_client(self) -> HttpHandler:
+        pass
+
+    def test_simple_get_request(self) -> None:
+        client = self.create_client()
+        # Test implementation...
+
+class TestPythonClient(HttpClientContract):
+    def create_client(self) -> HttpHandler:
+        return PythonClient()
 ```
 
 ## Development Setup
