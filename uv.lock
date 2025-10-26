@@ -48,12 +48,12 @@ wheels = [
 
 [[package]]
 name = "http4py-core"
-version = "0.1.0"
+version = "0.0.1"
 source = { editable = "http4py-core" }
 
 [[package]]
 name = "http4py-server-asgi"
-version = "0.1.0"
+version = "0.0.1"
 source = { editable = "http4py-server/asgi" }
 dependencies = [
     { name = "http4py-core" },
@@ -64,7 +64,7 @@ requires-dist = [{ name = "http4py-core", editable = "http4py-core" }]
 
 [[package]]
 name = "http4py-server-uvicorn"
-version = "0.1.0"
+version = "0.0.1"
 source = { editable = "http4py-server/uvicorn" }
 dependencies = [
     { name = "http4py-core" },

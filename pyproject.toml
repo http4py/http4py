@@ -62,27 +62,6 @@ combine-as-imports = true
 quote-style = "double"
 indent-style = "space"
 
-[tool.http4py.common]
-version = "0.1.0"
-requires-python = ">=3.13"
-license = "Apache-2.0"
-authors = [
-    {name = "http4py contributors", email = "noreply@http4py.org"}
-]
-readme = "README.md"
-homepage = "https://github.com/http4py/http4py"
-repository = "https://github.com/http4py/http4py"
-keywords = ["http", "web", "functional", "toolkit"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-]
-
 
 [tool.uv.sources]
 http4py-core = { workspace = true }

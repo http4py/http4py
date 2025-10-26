@@ -1,25 +1,12 @@
 [project]
 name = "http4py-server-uvicorn"
-version = "0.1.0"
+version = "0.0.1"
 description = "http4py Uvicorn Server"
 requires-python = ">=3.13"
-license = {text = "Apache-2.0"}
-authors = [
-    {name = "http4py contributors", email = "noreply@http4py.org"}
-]
-homepage = "https://github.com/http4py/http4py"
+license = "Apache-2.0"
+homepage = "https://http4py.org"
 repository = "https://github.com/http4py/http4py"
-keywords = ["http", "web", "functional", "toolkit", "uvicorn", "server"]
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "License :: OSI Approved :: Apache Software License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.13",
-    "Topic :: Internet :: WWW/HTTP",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Framework :: AsyncIO",
-]
+
 dependencies = [
     "http4py-core",
     "http4py-server-asgi",
@@ -29,7 +16,6 @@ dependencies = [
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
-
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/http4py"]
