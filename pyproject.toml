@@ -1,9 +1,9 @@
 [tool.uv.workspace]
 members = [
+    "http4py-client/requests",
     "http4py-core",
     "http4py-server/asgi",
     "http4py-server/uvicorn",
-    "http4py-client/requests",
     "http4py-testing/support"
 ]
 

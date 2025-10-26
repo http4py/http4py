@@ -29,7 +29,7 @@ class HttpServerContract(ABC):
         server = config.serve(handler)
         assert server.port() == port
 
-    def test_server_start_and_stop(self) -> None:
+    def test_server_start_returns_same_instance(self) -> None:
         def handler(request: Request) -> Response:
             return Response(OK).body_("Hello World")
 
@@ -38,6 +38,5 @@ class HttpServerContract(ABC):
         server = config.serve(handler)
 
         started_server = server.start()
-        StdLibClient()
+        assert started_server is server
         assert started_server.port() == port
-        started_server.stop()
