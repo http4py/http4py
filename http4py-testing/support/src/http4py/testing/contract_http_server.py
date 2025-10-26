@@ -32,11 +32,11 @@ def echo_handler(request: Request) -> Response:
 
 def header_handler(request: Request) -> Response:
     response = Response(OK).header_("Content-Type", "application/json")
-    
+
     # Echo back all request headers as response headers with "Echo-" prefix
     for name, value in request.headers:
         response = response.header_(f"Echo-{name}", value)
-    
+
     return response.body_("{}")
 
 
@@ -95,15 +95,15 @@ class HttpServerContract(ABC):
                 "X-Custom-Header": "test-value",
                 "X-API-Key": "secret123"
             }
-            
+
             response = requests.get(
                 f"http://localhost:{server.port()}/headers",
                 headers=request_headers,
                 timeout=5
             )
-            
+
             assert response.status_code == 200
-            
+
             # Check that all request headers are echoed back with "Echo-" prefix
             for name, value in request_headers.items():
                 echo_header_name = f"Echo-{name}"

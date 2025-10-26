@@ -41,11 +41,11 @@ class StandardAsgiAdapter(AsgiAdapter):
 
             request = Request(method, uri)
 
-            headers: dict[str, str] = {}
+            headers: list[tuple[str, str]] = []
             for name_bytes, value_bytes in scope.get("headers", []):
                 name = name_bytes.decode("latin1")
                 value = value_bytes.decode("latin1")
-                headers[name] = value
+                headers.append((name, value))
 
             request = request.headers_(headers)
 
@@ -70,7 +70,7 @@ class StandardAsgiAdapter(AsgiAdapter):
                     "type": "http.response.start",
                     "status": response.status.code,
                     "headers": [
-                        [name.encode("latin1"), value.encode("latin1")] for name, value in response.headers.items()
+                        # [name.encode("latin1"), value.encode("latin1")] for name, value in response.headers if value is not None
                     ],
                 }
             )
