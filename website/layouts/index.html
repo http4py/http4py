@@ -16,7 +16,7 @@
         <p style="font-size: 1.1rem; color: var(--text-muted); max-width: 700px; margin: 0 auto 2rem auto; line-height: 1.8;">
             A functional HTTP toolkit for Python, inspired by <a href="https://monkey.org/~marius/funsrv.pdf" target="_blank" style="color: var(--python-yellow); font-weight: 600;"><strong>Server as a Function</strong></a> — the paradigm that treats server-side logic as pure, composable functions. From the same development team that brought you <a href="https://http4k.org" target="_blank" style="color: var(--python-yellow); font-weight: 600;">http4k</a> — the most testable web framework on the planet!
         </p>
-        
+
         <p style="font-size: 1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 2rem auto; line-height: 1.7;">
             Build HTTP services that are just functions. No framework magic, no complex abstractions — your entire app is <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--python-yellow);">Request → Response</code>. Test without servers. Compose without complexity.
         </p>
@@ -66,36 +66,36 @@
             <div class="code-tabs" style="justify-content: center;">
                 <button class="code-tab active" onclick="showTab('handler')">Server as a Function</button>
                 <button class="code-tab" onclick="showTab('routing')">Route traffic</button>
-                <button class="code-tab" onclick="showTab('middleware')">Compose filters</button>
+                <button class="code-tab" onclick="showTab('middleware')">Add middleware</button>
                 <button class="code-tab" onclick="showTab('testing')">Simple testing</button>
                 <button class="code-tab" onclick="showTab('server')">Serve traffic</button>
                 <button class="code-tab" onclick="showTab('client')">Client as a Function</button>
             </div>
-                
+
             <div id="handler" class="code-content active">
                 {{ partial "code-example.html" (dict "file" "handler.py" "id" "handler-code") }}
             </div>
-            
+
             <div id="server" class="code-content">
                 {{ partial "code-example.html" (dict "file" "server.py" "id" "server-code") }}
             </div>
-            
+
             <div id="routing" class="code-content">
                 {{ partial "code-example.html" (dict "file" "routing.py" "id" "routing-code") }}
             </div>
-            
+
             <div id="client" class="code-content">
                 {{ partial "code-example.html" (dict "file" "client.py" "id" "client-code") }}
             </div>
-            
+
             <div id="middleware" class="code-content">
                 {{ partial "code-example.html" (dict "file" "filters.py" "id" "middleware-code") }}
             </div>
-            
+
             <div id="testing" class="code-content">
                 {{ partial "code-example.html" (dict "file" "testing.py" "id" "testing-code") }}
             </div>
-            
+
         </div>
 
         <div style="text-align: center; margin-top: 2rem;">
@@ -111,7 +111,7 @@
                 Key Features
             </h2>
         </div>
-        
+
         <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 800px; margin: 0 auto;">
             <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
                 <span style="color: var(--text-light); font-size: 0.95rem;">✨ Zero Magic</span>
