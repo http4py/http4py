@@ -16,12 +16,16 @@ class RequestsClient:
         try:
             url = str(request.uri)
             method = request.method.name
-            headers = request.headers.copy()
+            headers = {}
+            for name, value in request.headers:
+                if value is not None:
+                    headers[name] = value
 
             data = None
             if request.body.bytes:
                 data = request.body.bytes
-                if "Content-Length" not in headers:
+                has_content_length = any(name.lower() == "content-length" for name, _ in request.headers)
+                if not has_content_length:
                     headers["Content-Length"] = str(len(data))
 
             response = self._session.request(
@@ -31,7 +35,7 @@ class RequestsClient:
             status = Status.from_code(response.status_code)
             response_body = response.content
 
-            http4py_response = Response(status).headers_(dict(response.headers))
+            http4py_response = Response(status).headers_([(name, value) for name, value in response.headers.items()])
             if response_body:
                 http4py_response = http4py_response.body_(response_body)
 
