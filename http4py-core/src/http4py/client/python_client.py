@@ -7,7 +7,7 @@ from ..core.message import Request, Response
 from ..core.status import Status
 
 
-class PythonClient:
+class StdLibClient:
     """
     HTTP client implementation using Python's urllib.request.
 

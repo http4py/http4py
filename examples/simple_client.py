@@ -10,7 +10,7 @@ Demonstrates the beautiful symmetry:
 Shows both built-in Python client and optional Requests client.
 """
 
-from http4py.client import PythonClient
+from http4py.client import StdLibClient
 from http4py.core import Request, Response
 from http4py.core.method import GET, POST
 
@@ -28,7 +28,7 @@ def main() -> None:
     # Example 1: Simple GET request with stdlib client
     print("1. Simple GET request (Python stdlib client):")
     request = Request(GET, "https://httpbin.org/get")
-    client = PythonClient()
+    client = StdLibClient()
     response = client(request)
     print(f"Status: {response.status}")
     print(f"Body: {response.body.text[:100]}...")

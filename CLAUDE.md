@@ -87,16 +87,18 @@ class Example:
 - **Dev dependencies** - Packages add `http4py-testing-support` as dev dependency for testing
 
 ### Contract Example
+
 ```python
 from __future__ import annotations
 
-from http4py.client import PythonClient
+from http4py.client import StdLibClient
 from http4py.core import HttpHandler
 from http4py.testing import HttpClientContract
 
+
 class TestPythonClient(HttpClientContract):
     def create_client(self) -> HttpHandler:
-        return PythonClient()
+        return StdLibClient()
 ```
 
 ### Testing Support Package
@@ -171,15 +173,18 @@ response = Response(OK).body_("Hello World").header_("Content-Type", "text/plain
 ```
 
 ### Server
+
 ```python
 from http4py.core import Response
 from http4py.core.status import OK
-from http4py.server import StdLib
+from http4py.server import StdLibServer
+
 
 def hello_handler(request):
     return Response(OK).body_("Hello, http4py!")
 
-StdLib(8080).serve(hello_handler).start().block()
+
+StdLibServer(8080).serve(hello_handler).start().block()
 ```
 
 ### Client

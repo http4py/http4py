@@ -1,1 +1,2 @@
 from .contract_http_client import HttpClientContract as HttpClientContract
+from .contract_http_server import HttpServerContract as HttpServerContract

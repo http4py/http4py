@@ -1,9 +1,9 @@
-from http4py.client import PythonClient
+from http4py.client import StdLibClient
 from http4py.core import Request
 from http4py.core.method import GET
 
 # An HTTP client is just another HttpHandler function!
-client = PythonClient()
+client = StdLibClient()
 
 response = client(Request(GET, "https://httpbin.org/get"))
 

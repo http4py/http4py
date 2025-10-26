@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 from http4py.server import ServerConfig
-from http4py.server_uvicorn import Uvicorn
+from http4py.server import StdLibServer
 from http4py.testing import HttpServerContract
 
 
-class TestUvicornServerContract(HttpServerContract):
+class TestStdLibServerContract(HttpServerContract):
     def create_server_config(self, port: int) -> ServerConfig:
-        return Uvicorn(port)
+        return StdLibServer(port)

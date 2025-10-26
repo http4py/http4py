@@ -10,7 +10,7 @@ from .server import Http4pyServer
 from .server_config import ServerConfig
 
 
-class StdLib(ServerConfig):
+class StdLibServer(ServerConfig):
     def __init__(self, port: int = 8080):
         self._port = port
 

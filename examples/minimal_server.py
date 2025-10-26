@@ -7,11 +7,11 @@ The absolute simplest http4py server - just one line!
 
 from http4py.core import Response
 from http4py.core.status import OK
-from http4py.server import StdLib
+from http4py.server import StdLibServer
 
 if __name__ == "__main__":
     print("Starting minimal server on http://localhost:8080")
     print("Visit http://localhost:8080 to see 'Hello, http4py!'")
     print("Press Ctrl+C to stop")
 
-    StdLib(8080).serve(lambda req: Response(OK).body_("Hello, http4py!")).start().block()
+    StdLibServer(8080).serve(lambda req: Response(OK).body_("Hello, http4py!")).start().block()

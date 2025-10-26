@@ -8,7 +8,7 @@ from abc import ABC, abstractmethod
 from http4py.core import HttpHandler, Request, Response
 from http4py.core.method import GET, POST
 from http4py.core.status import OK, NOT_FOUND
-from http4py.server import StdLib
+from http4py.server import StdLibServer
 
 
 class HttpClientContract(ABC):
@@ -25,7 +25,7 @@ class HttpClientContract(ABC):
         def simple_handler(request: Request) -> Response:
             return Response(OK).body_("Hello from http4py server!").header_("Content-Type", "text/plain")
 
-        server = StdLib(0).serve(simple_handler).start()
+        server = StdLibServer(0).serve(simple_handler).start()
         port = server.port()
 
         server_thread = threading.Thread(target=server.block, daemon=True)
@@ -53,7 +53,7 @@ class HttpClientContract(ABC):
                 return Response(OK).body_("POST received").header_("Content-Type", "text/plain")
             return Response(NOT_FOUND).body_("Not found")
 
-        server = StdLib(0).serve(echo_handler).start()
+        server = StdLibServer(0).serve(echo_handler).start()
         port = server.port()
 
         server_thread = threading.Thread(target=server.block, daemon=True)
@@ -82,7 +82,7 @@ class HttpClientContract(ABC):
         def error_handler(request: Request) -> Response:
             return Response(NOT_FOUND).body_("Resource not found").header_("Content-Type", "text/plain")
 
-        server = StdLib(0).serve(error_handler).start()
+        server = StdLibServer(0).serve(error_handler).start()
         port = server.port()
 
         server_thread = threading.Thread(target=server.block, daemon=True)
@@ -109,7 +109,7 @@ class HttpClientContract(ABC):
             response_body = f"auth={auth_header},custom={custom_header}"
             return Response(OK).body_(response_body).header_("Content-Type", "text/plain")
 
-        server = StdLib(0).serve(header_echo_handler).start()
+        server = StdLibServer(0).serve(header_echo_handler).start()
         port = server.port()
 
         server_thread = threading.Thread(target=server.block, daemon=True)
