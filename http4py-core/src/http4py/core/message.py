@@ -13,17 +13,20 @@ from .uri import Uri
 
 @dataclass(frozen=True, init=False)
 class HttpMessage(ABC):
-    headers: dict[str, str]
+    headers: list[tuple[str, str | None]]
     body: Body
     version: HttpVersion
 
     def _init_http_message(self, version: HttpVersion = HttpVersion.HTTP_1_1) -> None:
-        object.__setattr__(self, "headers", {})
+        object.__setattr__(self, "headers", [])
         object.__setattr__(self, "body", _MemoryBody(""))
         object.__setattr__(self, "version", version)
 
     def header(self, name: str) -> str | None:
-        return self.headers.get(name)
+        for header_name, header_value in self.headers:
+            if header_name.lower() == name.lower():
+                return header_value
+        return None
 
     def body_string(self) -> str:
         return self.body.text
@@ -36,11 +39,11 @@ class HttpMessage(ABC):
         pass
 
     @abstractmethod
-    def header_(self, name: str, value: str) -> HttpMessage:
+    def header_(self, name: str, value: str | None) -> HttpMessage:
         pass
 
     @abstractmethod
-    def headers_(self, headers: dict[str, str]) -> HttpMessage:
+    def headers_(self, headers: list[tuple[str, str | None]]) -> HttpMessage:
         pass
 
 
@@ -58,7 +61,7 @@ class Request(HttpMessage):
         new_request = Request(
             overrides.get("method", self.method), overrides.get("uri", self.uri), overrides.get("version", self.version)
         )
-        object.__setattr__(new_request, "headers", overrides.get("headers", self.headers).copy())
+        object.__setattr__(new_request, "headers", list(overrides.get("headers", self.headers)))
         object.__setattr__(new_request, "body", overrides.get("body", self.body))
         return new_request
 
@@ -72,14 +75,14 @@ class Request(HttpMessage):
 
         return self._copy(body=new_body)
 
-    def header_(self, name: str, value: str) -> Request:
-        new_headers = self.headers.copy()
-        new_headers[name] = value
+    def header_(self, name: str, value: str | None) -> Request:
+        new_headers = list(self.headers)
+        new_headers.append((name, value))
         return self._copy(headers=new_headers)
 
-    def headers_(self, headers: dict[str, str]) -> Request:
-        new_headers = self.headers.copy()
-        new_headers.update(headers)
+    def headers_(self, headers: list[tuple[str, str | None]]) -> Request:
+        new_headers = list(self.headers)
+        new_headers.extend(headers)
         return self._copy(headers=new_headers)
 
 
@@ -93,7 +96,7 @@ class Response(HttpMessage):
 
     def _copy(self, **overrides: Any) -> Response:
         new_response = Response(overrides.get("status", self.status), overrides.get("version", self.version))
-        object.__setattr__(new_response, "headers", overrides.get("headers", self.headers).copy())
+        object.__setattr__(new_response, "headers", list(overrides.get("headers", self.headers)))
         object.__setattr__(new_response, "body", overrides.get("body", self.body))
         return new_response
 
@@ -107,12 +110,12 @@ class Response(HttpMessage):
 
         return self._copy(body=new_body)
 
-    def header_(self, name: str, value: str) -> Response:
-        new_headers = self.headers.copy()
-        new_headers[name] = value
+    def header_(self, name: str, value: str | None) -> Response:
+        new_headers = list(self.headers)
+        new_headers.append((name, value))
         return self._copy(headers=new_headers)
 
-    def headers_(self, headers: dict[str, str]) -> Response:
-        new_headers = self.headers.copy()
-        new_headers.update(headers)
+    def headers_(self, headers: list[tuple[str, str | None]]) -> Response:
+        new_headers = list(self.headers)
+        new_headers.extend(headers)
         return self._copy(headers=new_headers)

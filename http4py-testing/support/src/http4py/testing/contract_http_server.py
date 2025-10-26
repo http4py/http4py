@@ -34,7 +34,7 @@ def header_handler(request: Request) -> Response:
     response = Response(OK).header_("Content-Type", "application/json")
     
     # Echo back all request headers as response headers with "Echo-" prefix
-    for name, value in request.headers.items():
+    for name, value in request.headers:
         response = response.header_(f"Echo-{name}", value)
     
     return response.body_("{}")

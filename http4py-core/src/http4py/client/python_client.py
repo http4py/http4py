@@ -12,12 +12,15 @@ class StdLibClient:
         try:
             url = str(request.uri)
 
-            headers = request.headers.copy()
+            headers = {}
+            for name, value in request.headers:
+                headers[name] = value
 
             body_data = None
             if request.body.bytes:
                 body_data = request.body.bytes
-                if "Content-Length" not in headers:
+                has_content_length = any(name.lower() == "content-length" for name, _ in request.headers)
+                if not has_content_length:
                     headers["Content-Length"] = str(len(body_data))
 
             urllib_request = urllib.request.Request(
@@ -26,7 +29,7 @@ class StdLibClient:
 
             with urllib.request.urlopen(urllib_request) as urllib_response:
                 status_code = urllib_response.getcode()
-                response_headers = dict(urllib_response.headers.items())
+                response_headers = [(name, value) for name, value in urllib_response.headers.items()]
                 response_body = urllib_response.read()
 
                 status = Status.from_code(status_code)
@@ -39,7 +42,7 @@ class StdLibClient:
 
         except urllib.error.HTTPError as e:
             status = Status.from_code(e.code)
-            response_headers = dict(e.headers.items()) if e.headers else {}
+            response_headers = [(name, value) for name, value in e.headers.items()] if e.headers else []
             response_body = e.read() if hasattr(e, "read") else b""
 
             response = Response(status).headers_(response_headers)

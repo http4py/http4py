@@ -23,7 +23,7 @@ class HttpClientContract(ABC):
 
         assert response.status == OK
         assert response.body.text == "Hello from http4py server!"
-        assert response.headers["Content-Type"] == "text/plain"
+        assert response.header("Content-Type") == "text/plain"
 
     def test_post_with_simple_body(self, test_server: str) -> None:
         """Test POST request with simple text body."""
@@ -37,8 +37,7 @@ class HttpClientContract(ABC):
 
         assert response.status == OK, f"Expected 200 OK, got {response.status} ({response.status.code}). Body: {response.body.text!r}"
         assert response.body.text == "POST received", f"Expected 'POST received', got {response.body.text!r}"
-        assert response.headers[
-                   "Content-Type"] == "text/plain", f"Expected text/plain content-type, got {response.headers.get('Content-Type')}"
+        assert response.header("Content-Type") == "text/plain", f"Expected text/plain content-type, got {response.header('Content-Type')}"
 
     def test_error_handling(self, test_server: str) -> None:
         """Test handling of HTTP error responses."""

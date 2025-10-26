@@ -52,9 +52,15 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
                 for value in values:
                     uri = uri.query_(key, value)
 
-        headers = dict(self.headers.items())
+        headers = [(name, value) for name, value in self.headers.items()]
 
-        content_length = int(headers.get("content-length", headers.get("Content-Length", 0)))
+        content_length_header = None
+        for name, value in headers:
+            if name.lower() == "content-length":
+                content_length_header = value
+                break
+        
+        content_length = int(content_length_header) if content_length_header else 0
         body_data = self.rfile.read(content_length) if content_length > 0 else b""
 
         request = Request(method, uri).headers_(headers)
@@ -68,14 +74,18 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
 
         body_bytes = response.body.bytes
         
-        # Set Content-Length header if not already set
-        if "Content-Length" not in response.headers and body_bytes:
-            self.send_header("Content-Length", str(len(body_bytes)))
-        elif "Content-Length" not in response.headers:
-            self.send_header("Content-Length", "0")
+        # Check if Content-Length header already exists
+        has_content_length = any(name.lower() == "content-length" for name, _ in response.headers)
+        
+        if not has_content_length:
+            if body_bytes:
+                self.send_header("Content-Length", str(len(body_bytes)))
+            else:
+                self.send_header("Content-Length", "0")
 
-        for name, value in response.headers.items():
-            self.send_header(name, value)
+        for name, value in response.headers:
+            if value is not None:
+                self.send_header(name, value)
             
         # Always close connection to prevent reuse issues
         self.send_header("Connection", "close")

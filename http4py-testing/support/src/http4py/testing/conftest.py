@@ -17,8 +17,8 @@ def hello_handler(request: Request) -> Response:
 
 
 def headers_handler(request: Request) -> Response:
-    auth_header = request.headers.get("Authorization", "none")
-    custom_header = request.headers.get("X-Custom-Header", "none")
+    auth_header = request.header("Authorization") or "none"
+    custom_header = request.header("X-Custom-Header") or "none"
     response_body = f"auth={auth_header},custom={custom_header}"
     return Response(OK).body_(response_body).header_("Content-Type", "text/plain")
 
