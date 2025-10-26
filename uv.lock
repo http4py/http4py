@@ -4,10 +4,16 @@ requires-python = ">=3.13"
 
 [manifest]
 members = [
-    "http4py",
     "http4py-core",
     "http4py-server-asgi",
     "http4py-server-uvicorn",
+]
+
+[manifest.dependency-groups]
+dev = [
+    { name = "mypy", specifier = ">=1.0.0" },
+    { name = "pytest", specifier = ">=7.0.0" },
+    { name = "ruff", specifier = ">=0.1.0" },
 ]
 
 [[package]]
@@ -41,32 +47,13 @@ wheels = [
 ]
 
 [[package]]
-name = "http4py"
-version = "0.1.0"
-source = { editable = "." }
-
-[package.dev-dependencies]
-dev = [
-    { name = "mypy" },
-    { name = "pytest" },
-    { name = "ruff" },
-]
-
-[package.metadata]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "mypy", specifier = ">=1.0.0" },
-    { name = "pytest", specifier = ">=7.0.0" },
-    { name = "ruff", specifier = ">=0.1.0" },
-]
-
-[[package]]
 name = "http4py-core"
+version = "0.1.0"
 source = { editable = "http4py-core" }
 
 [[package]]
 name = "http4py-server-asgi"
+version = "0.1.0"
 source = { editable = "http4py-server/asgi" }
 dependencies = [
     { name = "http4py-core" },
@@ -77,6 +64,7 @@ requires-dist = [{ name = "http4py-core", editable = "http4py-core" }]
 
 [[package]]
 name = "http4py-server-uvicorn"
+version = "0.1.0"
 source = { editable = "http4py-server/uvicorn" }
 dependencies = [
     { name = "http4py-core" },
