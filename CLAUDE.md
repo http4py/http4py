@@ -58,16 +58,16 @@ from typing import Any
 @dataclass(frozen=True, init=False)
 class Example:
     value: str
-    
+
     def __init__(self, value: str):
         object.__setattr__(self, "value", value)
-    
+
     def _copy(self, **overrides: Any) -> Example:
         return Example(overrides.get("value", self.value))
-    
+
     def value_(self, new_value: str) -> Example:
         return self._copy(value=new_value)
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Example):
             return False
@@ -146,7 +146,7 @@ from http4py.server import StdLib
 def hello_handler(request):
     return Response(OK).body_("Hello, http4py!")
 
-StdLib(8080).to_server(hello_handler).start().block()
+StdLib(8080).serve(hello_handler).start().block()
 ```
 
 ### Client

@@ -13,7 +13,7 @@ class Uvicorn(ServerConfig):
     def __init__(self, port: int = 8080):
         self._port = port
 
-    def to_server(self, http: HttpHandler) -> Http4pyServer:
+    def serve(self, http: HttpHandler) -> Http4pyServer:
         class _UvicornServer(Http4pyServer):
             def __init__(self, port: int, http_handler: HttpHandler):
                 self._port = port

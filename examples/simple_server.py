@@ -22,7 +22,7 @@ def main() -> None:
         def handler(req: Request) -> Response:
             return Response(OK).body_("Hello, World!")
 
-        return StdLib(port=8080).to_server(handler)
+        return StdLib(port=8080).serve(handler)
 
     # Server with basic routing
     def multi_route_server() -> Http4pyServer:
@@ -40,7 +40,7 @@ def main() -> None:
             response = router(request)
             return response if response else Response(NOT_FOUND).body_("Not Found")
 
-        return StdLib(port=8080).to_server(app_handler)
+        return StdLib(port=8080).serve(app_handler)
 
     # Choose which server to run
     print("Starting simple server on http://localhost:8080")

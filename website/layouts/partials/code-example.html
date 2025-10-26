@@ -1,0 +1,13 @@
+{{/* Partial for displaying syntax-highlighted code from files */}}
+{{/* Usage: {{ partial "code-example.html" (dict "file" "handler.py" "id" "handler-code") }} */}}
+
+{{ $file := .file }}
+{{ $id := .id }}
+{{ $code := readFile (printf "data/src/%s" $file) }}
+
+<div class="code-block">
+    <button class="copy-btn" onclick="copyCode('{{ $id }}')">Copy</button>
+    <div id="{{ $id }}">
+        {{ highlight $code "python" "linenos=false,style=github-dark" }}
+    </div>
+</div>

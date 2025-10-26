@@ -3,5 +3,39 @@
             © {{ now.Year }} http4py. Open source under Apache 2.0 license.
         </p>
     </footer>
+
+    <script>
+        function showTab(tab) {
+            // Hide all content
+            document.querySelectorAll('.code-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Remove active class from all tabs
+            document.querySelectorAll('.code-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Show selected content and activate tab
+            document.getElementById(tab).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function copyCode(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const button = event.target;
+                const originalText = button.textContent;
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+    </script>
 </body>
 </html>

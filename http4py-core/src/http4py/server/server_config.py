@@ -8,5 +8,5 @@ from http4py.server import Http4pyServer
 
 class ServerConfig(ABC):
     @abstractmethod
-    def to_server(self, http: HttpHandler) -> Http4pyServer:
+    def serve(self, http: HttpHandler) -> Http4pyServer:
         pass

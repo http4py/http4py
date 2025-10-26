@@ -9,7 +9,7 @@ def test_uvicorn_server_creation() -> None:
     def handler(request: Request) -> Response:
         return Response(OK).body_("Hello World")
 
-    server = Uvicorn(8080).to_server(handler)
+    server = Uvicorn(8080).serve(handler)
     assert server.port() == 8080
 
 
@@ -17,5 +17,5 @@ def test_uvicorn_default_port() -> None:
     def handler(request: Request) -> Response:
         return Response(OK).body_("Hello World")
 
-    server = Uvicorn().to_server(handler)
+    server = Uvicorn().serve(handler)
     assert server.port() == 8080

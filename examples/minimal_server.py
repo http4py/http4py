@@ -14,4 +14,4 @@ if __name__ == "__main__":
     print("Visit http://localhost:8080 to see 'Hello, http4py!'")
     print("Press Ctrl+C to stop")
 
-    StdLib(8080).to_server(lambda req: Response(OK).body_("Hello, http4py!")).start().block()
+    StdLib(8080).serve(lambda req: Response(OK).body_("Hello, http4py!")).start().block()

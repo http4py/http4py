@@ -17,16 +17,16 @@
             A functional HTTP toolkit for Python, inspired by <a href="https://monkey.org/~marius/funsrv.pdf" target="_blank" style="color: var(--python-yellow); font-weight: 600;"><strong>Server as a Function</strong></a> — the paradigm that treats server-side logic as pure, composable functions. From the same development team that brought you <a href="https://http4k.org" target="_blank" style="color: var(--python-yellow); font-weight: 600;">http4k</a> — the most testable web framework on the planet!
         </p>
         
-        <p style="font-size: 1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 3rem auto; line-height: 1.7;">
-            Build composable, immutable HTTP services with a clean, functional API. http4py treats your entire application as a simple function that takes a Request and returns a Response — making it incredibly easy to test, reason about, and compose.
+        <p style="font-size: 1rem; color: var(--text-muted); max-width: 650px; margin: 0 auto 2rem auto; line-height: 1.7;">
+            Build HTTP services that are just functions. No framework magic, no complex abstractions — your entire app is <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px; color: var(--python-yellow);">Request → Response</code>. Test without servers. Compose without complexity.
         </p>
 
         <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-bottom: 3rem;">
             <a href="https://github.com/http4py/http4py" class="btn" target="_blank" rel="noopener noreferrer">
                 View on GitHub
             </a>
-            <a href="#features" class="btn btn-outline">
-                Learn More
+            <a href="#examples" class="btn btn-outline">
+                See Examples
             </a>
         </div>
 
@@ -52,35 +52,117 @@
         </div>
     </section>
 
+    <section id="examples" style="padding: 4rem 0; border-top: 1px solid var(--python-blue);">
+        <div style="text-align: center; margin-bottom: 3rem;">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--python-yellow);">
+                See It In Action
+            </h2>
+            <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto; font-size: 1.1rem;">
+                Your entire application is just a function. Same interface for servers and clients — incredible composability, extreme testability.
+            </p>
+        </div>
+
+        <div style="max-width: 900px; margin: 0 auto;">
+            <div class="code-tabs" style="justify-content: center;">
+                <button class="code-tab active" onclick="showTab('handler')">Server as a Function</button>
+                <button class="code-tab" onclick="showTab('routing')">Route traffic</button>
+                <button class="code-tab" onclick="showTab('middleware')">Compose filters</button>
+                <button class="code-tab" onclick="showTab('testing')">Simple testing</button>
+                <button class="code-tab" onclick="showTab('server')">Serve traffic</button>
+                <button class="code-tab" onclick="showTab('client')">Client as a Function</button>
+            </div>
+                
+            <div id="handler" class="code-content active">
+                {{ partial "code-example.html" (dict "file" "handler.py" "id" "handler-code") }}
+            </div>
+            
+            <div id="server" class="code-content">
+                {{ partial "code-example.html" (dict "file" "server.py" "id" "server-code") }}
+            </div>
+            
+            <div id="routing" class="code-content">
+                {{ partial "code-example.html" (dict "file" "routing.py" "id" "routing-code") }}
+            </div>
+            
+            <div id="client" class="code-content">
+                {{ partial "code-example.html" (dict "file" "client.py" "id" "client-code") }}
+            </div>
+            
+            <div id="middleware" class="code-content">
+                {{ partial "code-example.html" (dict "file" "filters.py" "id" "middleware-code") }}
+            </div>
+            
+            <div id="testing" class="code-content">
+                {{ partial "code-example.html" (dict "file" "testing.py" "id" "testing-code") }}
+            </div>
+            
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <p style="color: var(--text-muted); font-size: 1rem; margin-bottom: 1.5rem;">
+                <strong>HttpHandler = Callable[[Request], Response]</strong> — Same interface, infinite possibilities
+            </p>
+        </div>
+    </section>
+
+    <section style="padding: 3rem 0; border-top: 1px solid var(--python-blue);">
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem; color: var(--python-yellow);">
+                Key Features
+            </h2>
+        </div>
+        
+        <div style="display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; max-width: 800px; margin: 0 auto;">
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">✨ Zero Magic</span>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">🧪 Extreme Testability</span>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">📦 Minimal Dependencies</span>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">🔗 Functional Design</span>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">🛡️ Type Safe</span>
+            </div>
+            <div style="background: rgba(255, 255, 255, 0.05); padding: 0.75rem 1.5rem; border-radius: 25px; border: 1px solid var(--python-blue);">
+                <span style="color: var(--text-light); font-size: 0.95rem;">🔥 Immutable Objects</span>
+            </div>
+        </div>
+    </section>
+
     <section id="features" style="padding: 4rem 0; border-top: 1px solid var(--python-blue);">
         <div style="text-align: center; margin-bottom: 3rem;">
             <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--python-yellow);">
-                Why http4py?
+                Why Choose http4py?
             </h2>
             <p style="color: var(--text-muted); max-width: 700px; margin: 0 auto;">
-                Simple. Testable. Functional. When your server is just a function, everything becomes easier to understand, test, and compose. No magic, no complexity — just pure functions all the way down.
+                When your entire application is just a function, magic disappears and clarity emerges. Test without servers, compose without complexity, reason without surprises.
             </p>
         </div>
 
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem;">
             <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
-                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🧪 Extreme Testability</h3>
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🧪 Test Like You've Never Tested</h3>
                 <p style="color: var(--text-muted); line-height: 1.6;">
-                    Your entire app is just a function. No need to spin up servers or mock complex frameworks — just pass in a Request and assert on the Response. Testing has never been this simple.
+                    <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px;">response = app(request)</code> — No servers, no mocks, no complexity. Just call your function and assert the result.
                 </p>
             </div>
 
             <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
-                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🔗 Server as a Function</h3>
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🔗 Compose Everything</h3>
                 <p style="color: var(--text-muted); line-height: 1.6;">
-                    Inspired by Twitter's groundbreaking paper, http4py treats your entire application as a simple function: Request → Response. Compose, transform, and reason about your code like never before.
+                    Middleware, clients, servers — all just functions with the same signature. Compose them like LEGO blocks. <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 3px;">HttpHandler = Callable[[Request], Response]</code>
                 </p>
             </div>
 
             <div style="padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 12px; border: 1px solid var(--python-blue);">
-                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🛡️ Battle-Tested Approach</h3>
+                <h3 style="color: var(--python-yellow); margin-bottom: 1rem; font-size: 1.3rem;">🛡️ Battle-Tested Design</h3>
                 <p style="color: var(--text-muted); line-height: 1.6;">
-                    From the team behind http4k, which has been proven in production by countless teams. Full type safety with mypy strict mode and immutable data structures throughout.
+                    From the http4k team — proven in production worldwide. Immutable objects, strict typing, functional principles. Zero magic, maximum clarity.
                 </p>
             </div>
         </div>
@@ -93,11 +175,11 @@
 
         <div style="background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 1.5rem; margin: 2rem auto; max-width: 600px; text-align: left; border: 1px solid var(--python-blue);">
             <code style="color: var(--text-muted); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
-                # Coming soon
+                # Install http4py (coming soon!)
             </code>
             <br>
             <code style="color: var(--python-light-blue); font-family: 'JetBrains Mono', monospace; font-size: 0.95rem;">
-                pip install http4py-core
+                pip install http4py-core http4py-server-uvicorn
             </code>
         </div>
 
