@@ -10,16 +10,15 @@ from http4py.core.status import OK
 
 @dataclass(frozen=True)
 class ReversingFilter(Filter):
-    def __call__(self, next: HttpHandler) -> HttpHandler:
+    def __call__(self, fn: HttpHandler) -> HttpHandler:
         def decorated(request: Request) -> Response:
             reversed_body = request.body.text[::-1]
-            return next(request.body_(reversed_body))
+            return fn(request.body_(reversed_body))
 
         return decorated
 
 
 class TestFilter:
-
     def test_compose_filter(self) -> None:
         def echo(request: Request) -> Response:
             return Response(OK).body_(request.body)

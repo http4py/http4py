@@ -12,19 +12,19 @@ HttpHandler = Callable[[Request], Response]
 @dataclass(frozen=True)
 class Filter(ABC):
     @abstractmethod
-    def __call__(self, handler: HttpHandler) -> HttpHandler:
+    def __call__(self, fn: HttpHandler) -> HttpHandler:
         pass
 
-    def then(self, handler: HttpHandler) -> HttpHandler:
-        return self(handler)
+    def then(self, fn: HttpHandler) -> HttpHandler:
+        return self(fn)
 
-    def thenF(self, next: Filter) -> Filter:
+    def thenF(self, fn: Filter) -> Filter:
         @dataclass(frozen=True)
         class ComposedFilter(Filter):
             first: Filter
             second: Filter
 
-            def __call__(self, next: HttpHandler) -> HttpHandler:
-                return self.first(self.second(next))
+            def __call__(self, fn: HttpHandler) -> HttpHandler:
+                return self.first(self.second(fn))
 
-        return ComposedFilter(self, next)
+        return ComposedFilter(self, fn)

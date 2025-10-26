@@ -86,6 +86,7 @@ main() {
             "$0" test
             "$0" typecheck
             lint
+            format
             format-check
             ;;
         test|typecheck|build)
