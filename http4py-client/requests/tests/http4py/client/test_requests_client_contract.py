@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import importlib.util
-import sys
 from pathlib import Path
 
 from http4py.client_requests import RequestsClient
@@ -18,14 +17,10 @@ HttpClientContract = contract_module.HttpClientContract
 
 
 class TestRequestsClientContract(HttpClientContract):
-    """Test RequestsClient against the HTTP client contract."""
-
     def create_client(self) -> HttpHandler:
         return RequestsClient()
 
 
 class TestRequestsClientWithTimeout(HttpClientContract):
-    """Test RequestsClient with custom timeout against the HTTP client contract."""
-
     def create_client(self) -> HttpHandler:
         return RequestsClient(timeout=10.0)
