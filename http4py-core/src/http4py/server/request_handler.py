@@ -13,21 +13,20 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
         self.http_handler = http_handler
         super().__init__(*args, **kwargs)
 
-    def handle_one_request(self) -> None:
-        try:
-            self.raw_requestline = self.rfile.readline(65537)
-            if len(self.raw_requestline) > 65536:
-                self.requestline = ""
-                self.request_version = ""
-                self.command = ""
-                self.send_error(414)
-                return
-            if not self.raw_requestline:
-                self.close_connection = True
-                return
-            if not self.parse_request():
-                return
+    def do_GET(self) -> None:
+        self._handle_request()
 
+    def do_POST(self) -> None:
+        self._handle_request()
+
+    def do_PUT(self) -> None:
+        self._handle_request()
+
+    def do_DELETE(self) -> None:
+        self._handle_request()
+
+    def _handle_request(self) -> None:
+        try:
             request = self._convert_to_http4py_request()
             response = self.http_handler(request)
             self._send_http4py_response(response)
@@ -35,14 +34,11 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
             print(f"Error handling request: {e}")
             traceback.print_exc()
 
-            # Create an error response with the actual exception details
             error_body = f"Internal Server Error\n\n{str(e)}\n\nTraceback:\n{traceback.format_exc()}"
             error_response = (
                 Response(Status.INTERNAL_SERVER_ERROR).body_(error_body).header_("Content-Type", "text/plain")
             )
             self._send_http4py_response(error_response)
-        finally:
-            self.wfile.flush()
 
     def _convert_to_http4py_request(self) -> Request:
         method = Method(self.command)
@@ -58,7 +54,7 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
 
         headers = dict(self.headers.items())
 
-        content_length = int(headers.get("content-length", 0))
+        content_length = int(headers.get("content-length", headers.get("Content-Length", 0)))
         body_data = self.rfile.read(content_length) if content_length > 0 else b""
 
         request = Request(method, uri).headers_(headers)
@@ -70,10 +66,20 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
     def _send_http4py_response(self, response: Response) -> None:
         self.send_response(response.status.code)
 
+        body_bytes = response.body.bytes
+        
+        # Set Content-Length header if not already set
+        if "Content-Length" not in response.headers and body_bytes:
+            self.send_header("Content-Length", str(len(body_bytes)))
+        elif "Content-Length" not in response.headers:
+            self.send_header("Content-Length", "0")
+
         for name, value in response.headers.items():
             self.send_header(name, value)
+            
+        # Always close connection to prevent reuse issues
+        self.send_header("Connection", "close")
         self.end_headers()
 
-        body_bytes = response.body.bytes
         if body_bytes:
             self.wfile.write(body_bytes)

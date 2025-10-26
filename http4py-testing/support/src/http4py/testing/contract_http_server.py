@@ -1,10 +1,16 @@
 from __future__ import annotations
 
 import socket
+import threading
+import time
 from abc import ABC, abstractmethod
 
+import requests
+
 from http4py.core import Request, Response
-from http4py.core.status import OK
+from http4py.core.method import GET, POST
+from http4py.core.status import OK, CREATED
+from http4py.routing import route, routes
 from http4py.server import Http4pyServer, ServerConfig
 
 
@@ -15,28 +21,79 @@ def get_free_port() -> int:
         return s.getsockname()[1]
 
 
+def hello_handler(request: Request) -> Response:
+    return Response(OK).body_("Hello World").header_("Content-Type", "text/plain")
+
+
+def echo_handler(request: Request) -> Response:
+    body_text = request.body.text
+    return Response(CREATED).body_(f"Received: {body_text}").header_("Content-Type", "text/plain")
+
+
+def header_handler(request: Request) -> Response:
+    auth = request.headers.get("Authorization", "none")
+    content_type = request.headers.get("Content-Type", "none")
+    response_body = f"auth={auth},type={content_type}"
+    return Response(OK).body_(response_body).header_("Content-Type", "text/plain")
+
+
+def create_test_app():
+    return routes(
+        route("/hello").bind(GET).to(hello_handler),
+        route("/echo").bind(POST).to(echo_handler),
+        route("/headers").bind(GET).to(header_handler)
+    )
+
+
 class HttpServerContract(ABC):
     @abstractmethod
     def create_server_config(self, port: int) -> ServerConfig:
         pass
 
-    def test_server_creation(self) -> None:
-        def handler(request: Request) -> Response:
-            return Response(OK).body_("Hello World")
+    def _start_test_server(self):
+        config = self.create_server_config(0)
+        server = config.serve(create_test_app()).start()
 
-        port = get_free_port()
-        config = self.create_server_config(port)
-        server = config.serve(handler)
-        assert server.port() == port
+        server_thread = threading.Thread(target=server.block, daemon=True)
+        server_thread.start()
+        time.sleep(0.1)
 
-    def test_server_start_returns_same_instance(self) -> None:
-        def handler(request: Request) -> Response:
-            return Response(OK).body_("Hello World")
+        return server
 
-        port = get_free_port()
-        config = self.create_server_config(port)
-        server = config.serve(handler)
+    def test_get_request_handling(self) -> None:
+        server = self._start_test_server()
+        try:
+            response = requests.get(f"http://localhost:{server.port()}/hello", timeout=5)
+            assert response.status_code == 200
+            assert response.text == "Hello World"
+            assert response.headers["Content-Type"] == "text/plain"
+        finally:
+            server.stop()
 
-        started_server = server.start()
-        assert started_server is server
-        assert started_server.port() == port
+    def test_post_request_with_body(self) -> None:
+        server = self._start_test_server()
+        try:
+            response = requests.post(
+                f"http://localhost:{server.port()}/echo",
+                data="test data",
+                headers={"Content-Type": "text/plain"},
+                timeout=5
+            )
+            assert response.status_code == 201
+            assert response.text == "Received: test data", f"Expected 'Received: test data', got {response.text!r}"
+        finally:
+            server.stop()
+
+    def test_header_processing(self) -> None:
+        server = self._start_test_server()
+        try:
+            response = requests.get(
+                f"http://localhost:{server.port()}/headers",
+                headers={"Authorization": "Bearer token123", "Content-Type": "application/json"},
+                timeout=5
+            )
+            assert response.status_code == 200
+            assert "auth=Bearer token123" in response.text
+            assert "type=application/json" in response.text
+        finally:
+            server.stop()
