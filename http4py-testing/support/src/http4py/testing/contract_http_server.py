@@ -31,10 +31,13 @@ def echo_handler(request: Request) -> Response:
 
 
 def header_handler(request: Request) -> Response:
-    auth = request.headers.get("Authorization", "none")
-    content_type = request.headers.get("Content-Type", "none")
-    response_body = f"auth={auth},type={content_type}"
-    return Response(OK).body_(response_body).header_("Content-Type", "text/plain")
+    response = Response(OK).header_("Content-Type", "application/json")
+    
+    # Echo back all request headers as response headers with "Echo-" prefix
+    for name, value in request.headers.items():
+        response = response.header_(f"Echo-{name}", value)
+    
+    return response.body_("{}")
 
 
 def create_test_app():
@@ -87,13 +90,24 @@ class HttpServerContract(ABC):
     def test_header_processing(self) -> None:
         server = self._start_test_server()
         try:
+            request_headers = {
+                "Authorization": "Bearer token123",
+                "X-Custom-Header": "test-value",
+                "X-API-Key": "secret123"
+            }
+            
             response = requests.get(
                 f"http://localhost:{server.port()}/headers",
-                headers={"Authorization": "Bearer token123", "Content-Type": "application/json"},
+                headers=request_headers,
                 timeout=5
             )
+            
             assert response.status_code == 200
-            assert "auth=Bearer token123" in response.text
-            assert "type=application/json" in response.text
+            
+            # Check that all request headers are echoed back with "Echo-" prefix
+            for name, value in request_headers.items():
+                echo_header_name = f"Echo-{name}"
+                assert echo_header_name in response.headers, f"Missing echoed header: {echo_header_name}"
+                assert response.headers[echo_header_name] == value, f"Header value mismatch for {echo_header_name}"
         finally:
             server.stop()
