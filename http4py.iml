@@ -12,6 +12,7 @@
       <sourceFolder url="file://$MODULE_DIR$/http4py-client/requests/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/http4py-server/uvicorn/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/http4py-testing/support/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/http4py-server/asgi/src" isTestSource="false" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
