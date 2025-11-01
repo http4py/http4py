@@ -34,7 +34,7 @@ class StdLibClient:
 
                 status = Status.from_code(status_code)
 
-                response = Response(status).headers_(response_headers)
+                response = Response.for_status(status).headers_(response_headers)
                 if response_body:
                     response = response.body_(response_body)
 
@@ -45,7 +45,7 @@ class StdLibClient:
             response_headers = [(name, value) for name, value in e.headers.items()] if e.headers else []
             response_body = e.read() if hasattr(e, "read") else b""
 
-            response = Response(status).headers_(response_headers)
+            response = Response.for_status(status).headers_(response_headers)
             if response_body:
                 response = response.body_(response_body)
 

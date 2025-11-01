@@ -21,22 +21,22 @@ class ReversingFilter(Filter):
 class TestFilter:
     def test_compose_filter(self) -> None:
         def echo(request: Request) -> Response:
-            return Response(OK).body_(request.body)
+            return Response.ok().body_(request.body)
 
         decorated_handler = ReversingFilter().then(echo)
 
-        response = decorated_handler(Request(POST, "/test").body_("hello"))
+        response = decorated_handler(Request.post("/test").body_("hello"))
 
         assert response.status == OK
         assert response.body.text == "olleh"
 
     def test_double_compose_filter(self) -> None:
         def echo(request: Request) -> Response:
-            return Response(OK).body_(request.body)
+            return Response.ok().body_(request.body)
 
         decorated_handler = ReversingFilter().thenF(ReversingFilter()).then(echo)
 
-        response = decorated_handler(Request(POST, "/test").body_("hello"))
+        response = decorated_handler(Request.post("/test").body_("hello"))
 
         assert response.status == OK
         assert response.body.text == "hello"

@@ -6,6 +6,7 @@ from typing import Any
 from urllib.parse import parse_qs, urlparse
 
 from http4py.core import HttpHandler, Request, Response, Method, Uri, Status
+from http4py.core.http_version import HttpVersion
 
 
 class Http4pyRequestHandler(BaseHTTPRequestHandler):
@@ -35,9 +36,13 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
             traceback.print_exc()
 
             error_body = f"Internal Server Error\n\n{str(e)}\n\nTraceback:\n{traceback.format_exc()}"
-            error_response = (
-                Response(Status.INTERNAL_SERVER_ERROR).body_(error_body).header_("Content-Type", "text/plain")
-            )
+            error_response = Response(
+                status=Status.INTERNAL_SERVER_ERROR,
+                headers=[("Content-Type", "text/plain")],
+                body=None,
+                version=HttpVersion.HTTP_1_1
+            ).body_(error_body)
+
             self._send_http4py_response(error_response)
 
     def _convert_to_http4py_request(self) -> Request:
@@ -59,11 +64,17 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
             if name.lower() == "content-length":
                 content_length_header = value
                 break
-        
+
         content_length = int(content_length_header) if content_length_header else 0
         body_data = self.rfile.read(content_length) if content_length > 0 else b""
 
-        request = Request(method, uri).headers_(headers)
+        request = Request(
+            method=method,
+            uri=uri,
+            headers=headers,
+            body=None,
+            version=HttpVersion.HTTP_1_1
+        )
         if body_data:
             request = request.body_(body_data)
 
@@ -73,10 +84,10 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
         self.send_response(response.status.code)
 
         body_bytes = response.body.bytes
-        
+
         # Check if Content-Length header already exists
         has_content_length = any(name.lower() == "content-length" for name, _ in response.headers)
-        
+
         if not has_content_length:
             if body_bytes:
                 self.send_header("Content-Length", str(len(body_bytes)))
@@ -86,7 +97,7 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
         for name, value in response.headers:
             if value is not None:
                 self.send_header(name, value)
-            
+
         # Always close connection to prevent reuse issues
         self.send_header("Connection", "close")
         self.end_headers()
