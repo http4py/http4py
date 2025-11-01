@@ -35,7 +35,7 @@ class RequestsClient:
             status = Status.from_code(response.status_code)
             response_body = response.content
 
-            http4py_response = Response(status).headers_([(name, value) for name, value in response.headers.items()])
+            http4py_response = Response.for_status(status).headers_([(name, value) for name, value in response.headers.items()])
             if response_body:
                 http4py_response = http4py_response.body_(response_body)
 
@@ -43,7 +43,7 @@ class RequestsClient:
 
         except requests.exceptions.RequestException as e:
             error_body = f"Request Error: {str(e)}"
-            return Response(Status.INTERNAL_SERVER_ERROR).body_(error_body)
+            return Response.internal_server_error().body_(error_body)
         except Exception as e:
             error_body = f"Client Error: {str(e)}"
-            return Response(Status.INTERNAL_SERVER_ERROR).body_(error_body)
+            return Response.internal_server_error().body_(error_body)

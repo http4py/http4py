@@ -18,7 +18,7 @@ class HttpClientContract(ABC):
     def test_simple_get_request(self, test_server: str) -> None:
         """Test basic GET request functionality."""
         client = self.create_client()
-        request = Request(GET, f"{test_server}/")
+        request = Request.get(f"{test_server}/")
         response = client(request)
 
         assert response.status == OK
@@ -29,7 +29,7 @@ class HttpClientContract(ABC):
         """Test POST request with simple text body."""
         client = self.create_client()
         request = (
-            Request(POST, f"{test_server}/api/users")
+            Request.post(f"{test_server}/api/users")
             .body_("test data")
             .header_("Content-Type", "text/plain")
         )
@@ -42,7 +42,7 @@ class HttpClientContract(ABC):
     def test_error_handling(self, test_server: str) -> None:
         """Test handling of HTTP error responses."""
         client = self.create_client()
-        request = Request(GET, f"{test_server}/nonexistent")
+        request = Request.get(f"{test_server}/nonexistent")
         response = client(request)
 
         assert response.status == NOT_FOUND
@@ -51,7 +51,7 @@ class HttpClientContract(ABC):
         """Test sending custom headers."""
         client = self.create_client()
         request = (
-            Request(GET, f"{test_server}/headers")
+            Request.get(f"{test_server}/headers")
             .header_("Authorization", "Bearer token123")
             .header_("X-Custom-Header", "test-value")
         )

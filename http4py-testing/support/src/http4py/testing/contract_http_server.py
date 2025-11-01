@@ -22,16 +22,16 @@ def get_free_port() -> int:
 
 
 def hello_handler(request: Request) -> Response:
-    return Response(OK).body_("Hello World").header_("Content-Type", "text/plain")
+    return Response.ok().body_("Hello World").header_("Content-Type", "text/plain")
 
 
 def echo_handler(request: Request) -> Response:
     body_text = request.body.text
-    return Response(CREATED).body_(f"Received: {body_text}").header_("Content-Type", "text/plain")
+    return Response.created().body_(f"Received: {body_text}").header_("Content-Type", "text/plain")
 
 
 def header_handler(request: Request) -> Response:
-    response = Response(OK).header_("Content-Type", "application/json")
+    response = Response.ok().header_("Content-Type", "application/json")
 
     # Echo back all request headers as response headers with "Echo-" prefix
     for name, value in request.headers:

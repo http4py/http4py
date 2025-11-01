@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import threading
-from threading import Thread
 from time import sleep
 
 import pytest
@@ -13,18 +12,18 @@ from http4py.server import StdLibServer
 
 
 def hello_handler(request: Request) -> Response:
-    return Response(OK).body_("Hello from http4py server!").header_("Content-Type", "text/plain")
+    return Response.ok().body_("Hello from http4py server!").header_("Content-Type", "text/plain")
 
 
 def headers_handler(request: Request) -> Response:
     auth_header = request.header("Authorization") or "none"
     custom_header = request.header("X-Custom-Header") or "none"
     response_body = f"auth={auth_header},custom={custom_header}"
-    return Response(OK).body_(response_body).header_("Content-Type", "text/plain")
+    return Response.ok().body_(response_body).header_("Content-Type", "text/plain")
 
 
 def post_users_handler(request: Request) -> Response:
-    return Response(OK).body_("POST received").header_("Content-Type", "text/plain")
+    return Response.ok().body_("POST received").header_("Content-Type", "text/plain")
 
 
 def create_test_routes():
