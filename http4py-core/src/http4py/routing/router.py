@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from .route import _RouteDefinition
 from ..core.message import Request, Response
-from ..core.status import Status
+from ..core.status import NOT_FOUND
 
 
 @dataclass(frozen=True)
@@ -16,7 +16,7 @@ class RoutingHttpHandler:
             if self._matches(request, route_def):
                 return route_def.handler(request)
 
-        return Response(Status.NOT_FOUND).body_("Not Found")
+        return Response.of(NOT_FOUND).body_("Not Found")
 
     def _matches(self, request: Request, route_def: _RouteDefinition) -> bool:
         return request.method == route_def.method and request.uri.path == route_def.path
