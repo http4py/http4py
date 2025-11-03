@@ -59,7 +59,7 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
             if name.lower() == "content-length":
                 content_length_header = value
                 break
-        
+
         content_length = int(content_length_header) if content_length_header else 0
         body_data = self.rfile.read(content_length) if content_length > 0 else b""
 
@@ -73,10 +73,10 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
         self.send_response(response.status.code)
 
         body_bytes = response.body.bytes
-        
+
         # Check if Content-Length header already exists
         has_content_length = any(name.lower() == "content-length" for name, _ in response.headers)
-        
+
         if not has_content_length:
             if body_bytes:
                 self.send_header("Content-Length", str(len(body_bytes)))
@@ -86,7 +86,7 @@ class Http4pyRequestHandler(BaseHTTPRequestHandler):
         for name, value in response.headers:
             if value is not None:
                 self.send_header(name, value)
-            
+
         # Always close connection to prevent reuse issues
         self.send_header("Connection", "close")
         self.end_headers()

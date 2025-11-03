@@ -44,7 +44,7 @@ def create_test_app():
     return routes(
         route("/hello").bind(GET).to(hello_handler),
         route("/echo").bind(POST).to(echo_handler),
-        route("/headers").bind(GET).to(header_handler)
+        route("/headers").bind(GET).to(header_handler),
     )
 
 
@@ -79,7 +79,7 @@ class HttpServerContract(ABC):
                 f"http://localhost:{server.port()}/echo",
                 data="test data",
                 headers={"Content-Type": "text/plain"},
-                timeout=5
+                timeout=5,
             )
             assert response.status_code == 201
             assert response.text == "Received: test data", f"Expected 'Received: test data', got {response.text!r}"
@@ -92,14 +92,10 @@ class HttpServerContract(ABC):
             request_headers = {
                 "Authorization": "Bearer token123",
                 "X-Custom-Header": "test-value",
-                "X-API-Key": "secret123"
+                "X-API-Key": "secret123",
             }
 
-            response = requests.get(
-                f"http://localhost:{server.port()}/headers",
-                headers=request_headers,
-                timeout=5
-            )
+            response = requests.get(f"http://localhost:{server.port()}/headers", headers=request_headers, timeout=5)
 
             assert response.status_code == 200
 

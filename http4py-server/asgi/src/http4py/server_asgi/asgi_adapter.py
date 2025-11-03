@@ -70,7 +70,9 @@ class StandardAsgiAdapter(AsgiAdapter):
                     "type": "http.response.start",
                     "status": response.status.code,
                     "headers": [
-                        [name.encode("latin1"), value.encode("latin1")] for name, value in response.headers if value is not None
+                        [name.encode("latin1"), value.encode("latin1")]
+                        for name, value in response.headers
+                        if value is not None
                     ],
                 }
             )
