@@ -67,6 +67,7 @@ class HttpServerContract(ABC):
         server = self._start_test_server()
         try:
             response = requests.get(f"http://localhost:{server.port()}/hello", timeout=5)
+            print(response.headers)
             assert response.status_code == 200
             assert response.text == "Hello World"
             assert response.headers["Content-Type"] == "text/plain"
