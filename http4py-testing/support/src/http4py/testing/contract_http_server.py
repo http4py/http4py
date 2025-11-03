@@ -22,16 +22,16 @@ def get_free_port() -> int:
 
 
 def hello_handler(request: Request) -> Response:
-    return Response(OK).body_("Hello World").header_("Content-Type", "text/plain")
+    return Response.of(OK).body_("Hello World").header_("Content-Type", "text/plain")
 
 
 def echo_handler(request: Request) -> Response:
     body_text = request.body.text
-    return Response(CREATED).body_(f"Received: {body_text}").header_("Content-Type", "text/plain")
+    return Response.of(CREATED).body_(f"Received: {body_text}").header_("Content-Type", "text/plain")
 
 
 def header_handler(request: Request) -> Response:
-    response = Response(OK).header_("Content-Type", "application/json")
+    response = Response.of(OK).header_("Content-Type", "application/json")
 
     # Echo back all request headers as response headers with "Echo-" prefix
     for name, value in request.headers:
@@ -66,6 +66,7 @@ class HttpServerContract(ABC):
         server = self._start_test_server()
         try:
             response = requests.get(f"http://localhost:{server.port()}/hello", timeout=5)
+            print(response.headers)
             assert response.status_code == 200
             assert response.text == "Hello World"
             assert response.headers["Content-Type"] == "text/plain"
