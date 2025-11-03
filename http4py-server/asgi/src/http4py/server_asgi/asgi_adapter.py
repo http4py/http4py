@@ -39,7 +39,7 @@ class StandardAsgiAdapter(AsgiAdapter):
 
             uri = Uri.of(path)
 
-            request = Request(method, uri)
+            request = Request.of(method, uri)
 
             headers: list[tuple[str, str]] = []
             for name_bytes, value_bytes in scope.get("headers", []):

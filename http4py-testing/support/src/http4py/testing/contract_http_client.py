@@ -18,7 +18,7 @@ class HttpClientContract(ABC):
     def test_simple_get_request(self, test_server: str) -> None:
         """Test basic GET request functionality."""
         client = self.create_client()
-        request = Request(GET, f"{test_server}/")
+        request = Request.of(GET, f"{test_server}/")
         response = client(request)
 
         assert response.status == OK
@@ -28,7 +28,7 @@ class HttpClientContract(ABC):
     def test_post_with_simple_body(self, test_server: str) -> None:
         """Test POST request with simple text body."""
         client = self.create_client()
-        request = Request(POST, f"{test_server}/api/users").body_("test data").header_("Content-Type", "text/plain")
+        request = Request.of(POST, f"{test_server}/api/users").body_("test data").header_("Content-Type", "text/plain")
         response = client(request)
 
         assert response.status == OK, (
@@ -44,7 +44,7 @@ class HttpClientContract(ABC):
     def test_error_handling(self, test_server: str) -> None:
         """Test handling of HTTP error responses."""
         client = self.create_client()
-        request = Request(GET, f"{test_server}/nonexistent")
+        request = Request.of(GET, f"{test_server}/nonexistent")
         response = client(request)
 
         assert response.status == NOT_FOUND
@@ -53,7 +53,7 @@ class HttpClientContract(ABC):
         """Test sending custom headers."""
         client = self.create_client()
         request = (
-            Request(GET, f"{test_server}/headers")
+            Request.of(GET, f"{test_server}/headers")
             .header_("Authorization", "Bearer token123")
             .header_("X-Custom-Header", "test-value")
         )

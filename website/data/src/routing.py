@@ -7,8 +7,8 @@ from http4py.routing import routes, route
 app = routes(
     route("/echo").bind(POST).to(echo),
     route("/").bind(GET).to(
-        lambda req: Response(OK).body_("Welcome!")
+        lambda req: Response.of(OK).body_("Welcome!")
     )
 )
 
-response = app(Request(POST, "/echo").body_("Hello!"))
+response = app(Request.of(POST, "/echo").body_("Hello!"))

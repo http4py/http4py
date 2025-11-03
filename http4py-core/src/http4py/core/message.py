@@ -1,7 +1,8 @@
 from __future__ import annotations
 
+import dataclasses
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, BinaryIO
 
 from .body import Body, _MemoryBody, _StreamBody
@@ -16,11 +17,6 @@ class HttpMessage(ABC):
     headers: list[tuple[str, str | None]]
     body: Body
     version: HttpVersion
-
-    def _init_http_message(self, version: HttpVersion = HttpVersion.HTTP_1_1) -> None:
-        object.__setattr__(self, "headers", [])
-        object.__setattr__(self, "body", _MemoryBody(""))
-        object.__setattr__(self, "version", version)
 
     def header(self, name: str) -> str | None:
         for header_name, header_value in self.headers:
@@ -47,23 +43,20 @@ class HttpMessage(ABC):
         pass
 
 
-@dataclass(frozen=True, init=False)
+@dataclass(frozen=True)
 class Request(HttpMessage):
     method: Method
     uri: Uri
 
-    def __init__(self, method: Method, uri: str | Uri, version: HttpVersion = HttpVersion.HTTP_1_1):
-        self._init_http_message(version)
-        object.__setattr__(self, "method", method)
-        object.__setattr__(self, "uri", uri if isinstance(uri, Uri) else Uri.of(uri))
-
-    def _copy(self, **overrides: Any) -> Request:
-        new_request = Request(
-            overrides.get("method", self.method), overrides.get("uri", self.uri), overrides.get("version", self.version)
+    @staticmethod
+    def of(method: Method, uri: str | Uri, version: HttpVersion = HttpVersion.HTTP_1_1) -> Request:
+        return Request(
+            headers=[],
+            body=_MemoryBody(""),
+            version=version,
+            method=method,
+            uri=uri if isinstance(uri, Uri) else Uri.of(uri),
         )
-        object.__setattr__(new_request, "headers", list(overrides.get("headers", self.headers)))
-        object.__setattr__(new_request, "body", overrides.get("body", self.body))
-        return new_request
 
     def body_(self, content: str | bytes | Body | BinaryIO) -> Request:
         if isinstance(content, Body):
@@ -73,32 +66,22 @@ class Request(HttpMessage):
         else:
             new_body = _StreamBody(content)
 
-        return self._copy(body=new_body)
+        return dataclasses.replace(self, body=new_body)
 
     def header_(self, name: str, value: str | None) -> Request:
-        new_headers = list(self.headers)
-        new_headers.append((name, value))
-        return self._copy(headers=new_headers)
+        return dataclasses.replace(self, headers=self.headers + [(name, value)])
 
     def headers_(self, headers: list[tuple[str, str | None]]) -> Request:
-        new_headers = list(self.headers)
-        new_headers.extend(headers)
-        return self._copy(headers=new_headers)
+        return dataclasses.replace(self, headers=self.headers + headers)
 
 
-@dataclass(frozen=True, init=False)
+@dataclass(frozen=True)
 class Response(HttpMessage):
     status: Status
 
-    def __init__(self, status: Status, version: HttpVersion = HttpVersion.HTTP_1_1):
-        self._init_http_message(version)
-        object.__setattr__(self, "status", status)
-
-    def _copy(self, **overrides: Any) -> Response:
-        new_response = Response(overrides.get("status", self.status), overrides.get("version", self.version))
-        object.__setattr__(new_response, "headers", list(overrides.get("headers", self.headers)))
-        object.__setattr__(new_response, "body", overrides.get("body", self.body))
-        return new_response
+    @staticmethod
+    def of(status: Status, version: HttpVersion = HttpVersion.HTTP_1_1) -> Response:
+        return Response(headers=[], body=_MemoryBody(""), version=version, status=status)
 
     def body_(self, content: str | bytes | Body | BinaryIO) -> Response:
         if isinstance(content, Body):
@@ -108,14 +91,10 @@ class Response(HttpMessage):
         else:
             new_body = _StreamBody(content)
 
-        return self._copy(body=new_body)
+        return dataclasses.replace(self, body=new_body)
 
     def header_(self, name: str, value: str | None) -> Response:
-        new_headers = list(self.headers)
-        new_headers.append((name, value))
-        return self._copy(headers=new_headers)
+        return dataclasses.replace(self, headers=self.headers + [(name, value)])
 
     def headers_(self, headers: list[tuple[str, str | None]]) -> Response:
-        new_headers = list(self.headers)
-        new_headers.extend(headers)
-        return self._copy(headers=new_headers)
+        return dataclasses.replace(self, headers=self.headers + headers)

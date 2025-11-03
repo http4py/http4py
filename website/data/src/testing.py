@@ -4,7 +4,7 @@ from http4py.core.status import OK
 
 # Test your app without spinning up a server
 def test_echo_handler():
-    request = Request(POST, "/").body_("test")
+    request = Request.of(POST, "/").body_("test")
     response = echo(request)  # Just call your function!
 
     assert response.status == OK

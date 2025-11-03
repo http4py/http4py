@@ -27,7 +27,7 @@ def main() -> None:
 
     # Example 1: Simple GET request with stdlib client
     print("1. Simple GET request (Python stdlib client):")
-    request = Request(GET, "https://httpbin.org/get")
+    request = Request.of(GET, "https://httpbin.org/get")
     client = StdLibClient()
     response = client(request)
     print(f"Status: {response.status}")
@@ -45,7 +45,7 @@ def main() -> None:
 
     # Example 3: GET with query parameters
     print("3. GET with query parameters:")
-    request = Request(GET, "https://httpbin.org/get?param1=value1&param2=value2")
+    request = Request.of(GET, "https://httpbin.org/get?param1=value1&param2=value2")
     response = client(request)
     print(f"Status: {response.status}")
     print(f"Response contains our params: {'param1' in response.body.text}")
@@ -57,7 +57,7 @@ def main() -> None:
 
     data = {"name": "Alice", "age": 30}
     request = (
-        Request(POST, "https://httpbin.org/post").body_(json.dumps(data)).header_("Content-Type", "application/json")
+        Request.of(POST, "https://httpbin.org/post").body_(json.dumps(data)).header_("Content-Type", "application/json")
     )
     response = client(request)
     print(f"Status: {response.status}")
@@ -73,14 +73,14 @@ def main() -> None:
         print(f"  ← Received {response.status.code} response")
         return response
 
-    request = Request(GET, "https://httpbin.org/status/200")
+    request = Request.of(GET, "https://httpbin.org/status/200")
     response = logging_client(request)
     print(f"Final status: {response.status}")
     print()
 
     # Example 6: Error handling (4xx/5xx responses)
     print("6. Error handling:")
-    request = Request(GET, "https://httpbin.org/status/404")
+    request = Request.of(GET, "https://httpbin.org/status/404")
     response = client(request)
     print(f"404 Status: {response.status}")
     print(f"Is error response: {response.status.code >= 400}")
@@ -90,7 +90,7 @@ def main() -> None:
     if HAS_REQUESTS:
         print("7. Requests client with custom timeout:")
         custom_client = RequestsClient(timeout=5.0)
-        request = Request(GET, "https://httpbin.org/delay/1")
+        request = Request.of(GET, "https://httpbin.org/delay/1")
         response = custom_client(request)
         print(f"Status: {response.status}")
         print("Response time handled gracefully")

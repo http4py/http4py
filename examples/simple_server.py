@@ -10,21 +10,21 @@ from http4py.server import Http4pyServer, StdLibServer
 def main() -> None:
     def hello_world() -> Http4pyServer:
         def handler(req: Request) -> Response:
-            return Response(OK).body_("Hello, World!")
+            return Response.of(OK).body_("Hello, World!")
 
         return StdLibServer(port=8080).serve(handler)
 
     def multi_route_server() -> Http4pyServer:
         app = routes(
-            route("/").bind(GET).to(lambda req: Response(OK).body_("Welcome to http4py!")),
-            route("/health").bind(GET).to(lambda req: Response(OK).body_("OK")),
-            route("/echo").bind(POST).to(lambda req: Response(OK).body_(req.body)),
-            route("/hello/{name}").bind(GET).to(lambda req: Response(OK).body_("Hello, Anonymous!")),
+            route("/").bind(GET).to(lambda req: Response.of(OK).body_("Welcome to http4py!")),
+            route("/health").bind(GET).to(lambda req: Response.of(OK).body_("OK")),
+            route("/echo").bind(POST).to(lambda req: Response.of(OK).body_(req.body)),
+            route("/hello/{name}").bind(GET).to(lambda req: Response.of(OK).body_("Hello, Anonymous!")),
         )
 
         def app_handler(request: Request) -> Response:
             response = app(request)
-            return response if response else Response(NOT_FOUND).body_("Not Found")
+            return response if response else Response.of(NOT_FOUND).body_("Not Found")
 
         return StdLibServer(port=8080).serve(app_handler)
 

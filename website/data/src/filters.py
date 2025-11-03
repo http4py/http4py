@@ -15,5 +15,5 @@ class ReverseContent(Filter):
 
 # combining filters/handlers is just composing functions
 reversed_echo = ReverseContent().then(echo)
-response = reversed_echo(Request(POST, "/").body_("Hello!"))
+response = reversed_echo(Request.of(POST, "/").body_("Hello!"))
 print(response.body.text)  # "!olleH"
