@@ -59,7 +59,6 @@ class HttpServerContract(ABC):
 
         server_thread = threading.Thread(target=server.block, daemon=True)
         server_thread.start()
-        time.sleep(0.1)
 
         return server
 
