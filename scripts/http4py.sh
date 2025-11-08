@@ -34,7 +34,15 @@ EOF
 
 test() {
     local module="$1"
-    ./scripts/test.sh "$module"
+    if [ -z "$module" ]; then
+        uv run pytest
+    else
+        local pkg_name="${module//\//-}"
+        if [[ ! "$pkg_name" =~ ^http4py- ]]; then
+            pkg_name="http4py-$pkg_name"
+        fi
+        uv run --package "$pkg_name" pytest
+    fi
 }
 
 typecheck() {
