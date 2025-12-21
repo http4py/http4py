@@ -83,6 +83,8 @@ response = python_client(request)
 print(f"Status: {response.status}")
 ```
 
+
+
 ### Routing
 ```python
 from http4py.core import Response
