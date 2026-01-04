@@ -91,10 +91,11 @@ main() {
 
     case "$1" in
         check)
-            "$0" test
+            echo "Running all tests once..."
+            uv run pytest
+            echo "Running type checks for all packages..."
             "$0" typecheck
             lint
-            format
             format-check
             ;;
         test|typecheck|build)
