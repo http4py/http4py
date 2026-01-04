@@ -7,11 +7,11 @@ from http4py.core.method import POST
 @dataclass(frozen=True)
 class ReverseContent(Filter):
     def __call__(self, fn: HttpHandler) -> HttpHandler:
-        def decorated(request: Request) -> Response:
+        def _(request: Request) -> Response:
             reversed_body = request.body.text[::-1]
             return fn(request.body_(reversed_body))
 
-        return decorated
+        return _
 
 # combining filters/handlers is just composing functions
 reversed_echo = ReverseContent().then(echo)

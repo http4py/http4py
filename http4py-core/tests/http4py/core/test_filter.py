@@ -11,11 +11,11 @@ from http4py.core.status import OK
 @dataclass(frozen=True)
 class ReversingFilter(Filter):
     def __call__(self, fn: HttpHandler) -> HttpHandler:
-        def decorated(request: Request) -> Response:
+        def _(request: Request) -> Response:
             reversed_body = request.body.text[::-1]
             return fn(request.body_(reversed_body))
 
-        return decorated
+        return _
 
 
 class TestFilter:
