@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # http4py - Python HTTP Toolkit
 
 ## Project Overview
@@ -7,10 +11,13 @@ http4py is a functional HTTP toolkit for Python, inspired by the http4k library.
 ## Architecture
 
 ### Package Structure
-- **`http4py.core`** - Core HTTP primitives (Request, Response, Uri, Status, Method, etc.)
-- **`http4py.routing`** - Routing functionality (Route, route, RoutingHttpHandler, routes)
-- **`http4py.server`** - Server abstractions and implementations (Http4pyServer, StdLib)
-- **`http4py.client`** - HTTP client implementations (stdlib_client)
+This is a uv workspace with multiple packages that follow a modular monorepo structure:
+
+- **`http4py-core`** - Core HTTP primitives (Request, Response, Uri, Status, Method, etc.)
+- **`http4py-testing/support`** - Shared testing utilities and contracts for cross-package testing
+- **`http4py-client/requests`** - HTTP client using requests library
+- **`http4py-server/asgi`** - ASGI server adapters
+- **`http4py-server/uvicorn`** - Uvicorn server implementation
 
 ### Key Design Principles
 - **Immutability** - All HTTP objects are immutable using frozen dataclasses
@@ -21,9 +28,53 @@ http4py is a functional HTTP toolkit for Python, inspired by the http4k library.
 - **Enum-based constants** - Use enums with convenience constants for HTTP methods and status codes
 - **Test contracts** - Use abstract base classes to ensure consistent behavior across implementations
 
-## Style Guide
+## Development Commands
 
-### Code Style
+### Main Development Script
+Use `./scripts/http4py.sh` for all development tasks. This script handles workspace operations across all packages:
+
+#### Testing
+```bash
+./scripts/http4py.sh test                    # Test all packages
+./scripts/http4py.sh test http4py-core       # Test specific package
+./scripts/http4py.sh test core               # Also works (auto-prefixes http4py-)
+```
+
+#### Type Checking
+```bash
+./scripts/http4py.sh typecheck               # Type check all packages + examples
+./scripts/http4py.sh typecheck http4py-core  # Type check specific package
+```
+
+#### Code Quality
+```bash
+./scripts/http4py.sh lint                    # Run ruff linting
+./scripts/http4py.sh format                  # Auto-format with ruff
+./scripts/http4py.sh format-check            # Check formatting
+./scripts/http4py.sh check                   # Run ALL checks (test + typecheck + lint + format)
+```
+
+#### Build and Release
+```bash
+./scripts/http4py.sh build                   # Build all packages
+./scripts/http4py.sh build http4py-core      # Build specific package
+./scripts/http4py.sh clean                   # Clean build artifacts
+./scripts/http4py.sh release patch           # Release with version bump
+```
+
+### Direct UV Commands (Alternative)
+```bash
+uv run pytest                               # Run all tests
+uv run --package http4py-core pytest        # Test specific package
+uv run --package http4py-core mypy -p http4py  # Type check specific package
+uv run ruff check .                         # Lint
+uv run ruff format .                        # Format
+uv build --package http4py-core             # Build package
+```
+
+## Code Style Guidelines
+
+### Code Style Requirements
 - **NO COMMENTS** - Code should be self-documenting
 - **Future annotations MANDATORY** - Always use `from __future__ import annotations` as first import
 - **NO QUOTED TYPE NAMES** - Never use quotes around type names (e.g., `-> Request` not `-> "Request"`)
@@ -49,7 +100,7 @@ from dataclasses import dataclass
 from typing import Dict, Optional, Union
 ```
 
-### Example Code Style
+### Example Code Pattern
 ```python
 from __future__ import annotations
 
@@ -77,10 +128,9 @@ class Example:
 
 ## Testing Guidelines
 
-### Test Contracts
-- **Contract naming** - Use `contract_*` prefix for test contract files (e.g., `contract_http_client.py`)
-<<<<<<< HEAD
+### Test Contracts Architecture
 - **Testing support package** - Use `http4py-testing-support` package for shared testing utilities and contracts
+- **Contract naming** - Use `contract_*` prefix for test contract files (e.g., `contract_http_client.py`)
 - **Abstract base classes** - Use ABC to define behavioral contracts that implementations must satisfy
 - **Import pattern** - Import shared contracts: `from http4py.testing import HttpClientContract`
 - **Implementation testing** - Each implementation extends the contract to ensure consistent behavior
@@ -88,7 +138,6 @@ class Example:
 - **Dev dependencies** - Packages add `http4py-testing-support` as dev dependency for testing
 
 ### Contract Example
-
 ```python
 from __future__ import annotations
 
@@ -96,75 +145,12 @@ from http4py.client import StdLibClient
 from http4py.core import HttpHandler
 from http4py.testing import HttpClientContract
 
-
 class TestPythonClient(HttpClientContract):
     def create_client(self) -> HttpHandler:
         return StdLibClient()
 ```
 
-### Testing Support Package
-The `http4py-testing-support` package contains reusable testing utilities:
-- **Package name**: `http4py-testing-support`
-- **Location**: `http4py-testing/support/`
-- **Import path**: `from http4py.testing import ContractName`
-- **Dependencies**: Depends on `http4py-core` for HTTP primitives
-- **Dev dependency**: Other packages depend on this for testing
-
-=======
-- **Shared contracts** - Place shared test contracts in the core package tests for cross-package access
-- **Abstract base classes** - Use ABC to define behavioral contracts that implementations must satisfy
-- **Import pattern** - Import shared contracts: `from http4py.client.contract_http_client import ContractName`
-- **Implementation testing** - Each implementation extends the contract to ensure consistent behavior
-- **Integration testing** - Use real servers/clients instead of mocks for contract tests when possible
-
-### Contract Example
-```python
-from __future__ import annotations
-
-from abc import ABC, abstractmethod
-from http4py.core import HttpHandler, Request, Response
-
-class HttpClientContract(ABC):
-    @abstractmethod
-    def create_client(self) -> HttpHandler:
-        pass
-
-    def test_simple_get_request(self) -> None:
-        client = self.create_client()
-        # Test implementation...
-
-class TestPythonClient(HttpClientContract):
-    def create_client(self) -> HttpHandler:
-        return PythonClient()
-```
-
->>>>>>> e965a52 (trim down justfile)
-## Development Setup
-
-### Tools Configuration
-- **uv** - Package management and virtual environments
-- **pytest** - Testing framework
-- **mypy** - Type checking (strict mode)
-- **ruff** - Linting and formatting
-- **Python 3.13+** - Minimum version
-
-### Running Tests
-```bash
-uv run python -m pytest -v --tb=short
-```
-
-### Type Checking
-```bash
-uv run mypy core/src/http4py
-```
-
-### Linting and Formatting
-```bash
-uv run ruff check .
-uv run ruff format .
-```
-
-## Core Components
+## Core Components Architecture
 
 ### HTTP Messages
 - **Request** - HTTP request with method, uri, headers, body
@@ -178,120 +164,13 @@ uv run ruff format .
 - **HttpHandler** - Core functional interface: Callable[[Request], Response]
 - **Uri** - Immutable URI with `Uri.of()` parsing and builder methods
 
-### Server Components
-- **Http4pyServer** - Abstract server interface with start/stop/block methods
-- **ServerConfig** - Abstract configuration interface
-- **StdLib** - Standard library HTTP server implementation
+### Workspace Package Organization
+- **Core Package** (`http4py-core`) - Contains fundamental HTTP primitives and base abstractions
+- **Client Packages** (`http4py-client/*`) - HTTP client implementations (requests, etc.)
+- **Server Packages** (`http4py-server/*`) - Server implementations (ASGI, uvicorn, etc.)
+- **Testing Package** (`http4py-testing/support`) - Shared test contracts and utilities
 
-### Client Components
-- **stdlib_client** - HTTP client as HttpHandler using urllib.request
-
-### Routing
-- **Route** - Path-based routing with fluent API
-- **RoutingHttpHandler** - Handler that dispatches based on routes
-
-## Usage Examples
-
-### Basic Request/Response
-```python
-from http4py.core import Request, Response
-from http4py.core.method import GET
-from http4py.core.status import OK
-
-request = Request(GET, "/api/users").header_("Authorization", "Bearer token")
-response = Response(OK).body_("Hello World").header_("Content-Type", "text/plain")
-```
-
-### Server
-
-```python
-from http4py.core import Response
-from http4py.core.status import OK
-from http4py.server import StdLibServer
-
-
-def hello_handler(request):
-    return Response(OK).body_("Hello, http4py!")
-
-
-StdLibServer(8080).serve(hello_handler).start().block()
-```
-
-### Client
-```python
-from http4py.core import Request
-from http4py.core.method import GET
-from http4py.client import stdlib_client
-
-request = Request(GET, "https://api.example.com/users")
-response = stdlib_client(request)
-print(f"Status: {response.status}")
-```
-
-### Routing
-```python
-from http4py.core import Response
-from http4py.core.method import GET
-from http4py.core.status import OK
-from http4py.routing import route, routes
-
-def hello_handler(request):
-    return Response(OK).body_("Hello!").header_("Content-Type", "text/plain")
-
-app = routes(
-    route("/hello").bind(GET).to(hello_handler)
-)
-```
-
-### URI Building
-```python
-from http4py.core import Uri
-
-# Simple string URIs (preferred for most cases)
-request = Request(GET, "https://api.example.com/users?active=true&limit=10")
-
-# Builder pattern for dynamic construction
-uri = (Uri.of("https://api.example.com")
-    .path_("/users")
-    .query_("active", "true")
-    .query_("limit", "10"))
-
-print(str(uri))  # https://api.example.com/users?active=true&limit=10
-```
-
-## CI/CD
-
-GitHub Actions workflow automatically:
-- Runs tests on Python 3.13
-- Performs type checking with mypy
-- Runs linting with ruff
-- Builds packages
-- Uploads build artifacts
-
-## Commands Reference
-
-### Package Management
-```bash
-uv sync --dev              # Install dependencies
-uv add <package>           # Add dependency
-uv build                   # Build package
-```
-
-### Testing
-```bash
-uv run pytest             # Run all tests
-uv run pytest -v          # Verbose output
-uv run pytest path/       # Run specific tests
-```
-
-### Quality Checks
-```bash
-uv run mypy core/src/      # Type checking
-uv run ruff check .        # Linting
-uv run ruff format .       # Auto-formatting
-```
-
-## Important Reminders
+## Important Implementation Reminders
 
 1. **Always use `from __future__ import annotations`**
 2. **Never add comments to code**
@@ -310,3 +189,25 @@ uv run ruff format .       # Auto-formatting
 15. **Prefer string URIs** - Use `Request(GET, "https://example.com")` over builder pattern for simple cases
 16. **Uri.of() for parsing** - Use `Uri.of()` method instead of deprecated `Uri.parse()`
 17. **Do not explicitly reference modules in root pyproject.toml except in workspace member list**
+
+## Workspace Development Patterns
+
+### Cross-Package Development
+- Use the main development script `./scripts/http4py.sh` for operations across packages
+- The script automatically handles package name normalization (e.g., "core" becomes "http4py-core")
+- Dependencies between packages are managed via `[tool.uv.sources]` workspace references
+- Testing support package provides shared contracts for consistent behavior across implementations
+
+### Package-Specific Operations
+- Use `uv run --package <package-name>` for package-specific operations
+- Each package has its own `pyproject.toml` with build configuration
+- Testing contracts ensure implementations behave consistently across different packages
+- Type checking runs per-package plus examples directory
+
+### Tool Configuration
+- **Python 3.13+** minimum version across all packages
+- **uv** for package management and virtual environments
+- **pytest** for testing with shared configuration in root pyproject.toml
+- **mypy** in strict mode with workspace-wide configuration
+- **ruff** for linting and formatting with consistent rules
+- **hatchling** for building packages
